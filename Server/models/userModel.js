@@ -13,14 +13,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    roomsOwned: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
-    roomsRented: [
-      {
-        roomId: { type: mongoose.Schema.Types.ObjectId, ref: "Room" },
-        startDate: Date,
-        endDate: Date,
-      },
-    ],
+    role:{
+      type:String,
+      required:true,
+      default:"user"
+    }
   },
   { timestamps: true }
 );
