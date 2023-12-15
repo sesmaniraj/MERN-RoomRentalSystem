@@ -12,6 +12,8 @@ import { Provider } from "react-redux";
 import HomePage from "./components/pages/HomePage.jsx";
 import LoginPage from "./components/pages/LoginPage.jsx";
 import RegisterPage from "./components/pages/RegisterPage.jsx";
+import PrivateRoute from "./components/private/PrivateRoute.jsx";
+import AdminDashboard from "./components/dashboard/AdminDashboard.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +21,9 @@ const router = createBrowserRouter(
       <Route index={true} path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="" element={<PrivateRoute />}>
+        <Route path="/admindashboard" element={<AdminDashboard />} />
+      </Route>
     </Route>
   )
 );
