@@ -1,18 +1,16 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
-import Register from "./components/auth/Register";
-import HomePage from "./components/pages/HomePage";
-import Login from "./components/auth/Login";
-import AdminDashboard from "./components/dashboard/AdminDashboard";
+import Navbar from "./components/Navbar";
+import { Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/admindashboard" element={<AdminDashboard />} />
-    </Routes>
+    <>
+      <Navbar />
+      <ToastContainer />
+      <Outlet />
+    </>
   );
 };
 
