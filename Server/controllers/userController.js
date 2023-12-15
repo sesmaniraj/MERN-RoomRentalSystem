@@ -1,64 +1,103 @@
 import UserModel from "../models/userModel.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { generateToken } from "../utils/generateTokens.js";
 
 //for signup
-export const signUp = async (req, res) => {
+export const registerUser = async (req, res) => {
   const { username, email, password, phoneNumber, address, role } = req.body;
 
-  if (password.length < 6) {
-    return res
-      .status(400)
-      .json({ message: "Password must be atleast 6 characters" });
-  }
-  try {
-    //to check if the user is existing or not
-    const existingUser = await UserModel.findOne({
-      email: email,
+  //to check if the user is existing or not
+  const existingUser = await UserModel.findOne({
+    email: email,
+  });
+  if (existingUser) {
+    res.status(400).json({ message: "User already exists" });
+  } else {
+    //now creating the new user
+    const user = await UserModel.create({
+      username,
+      email,
+      username,
+      password,
+      address,
+      phoneNumber,
+      role,
     });
-    if (existingUser) {
-      res.status(400).json({ message: "User already exists" });
-    } else {
-      //password hashing using bcrypt
-      const hashedPassword = bcrypt.hashSync(password, 10);
-      //now creating the new user
-      const newUser = await UserModel.create({
-        username: username,
-        email: email,
-        username: username,
-        password: hashedPassword,
-        address: address,
-        phoneNumber: phoneNumber,
-        role: role,
+
+    if (user) {
+      generateToken(res, newUser._id);
+      res.status(201).json({
+        _id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+        address: newUser.address,
+        phoneNumber: newUser.phoneNumber,
       });
-
-      //json token maximum limit
-      const maxLimit = 3 * 60 * 60;
-
-      //generating token using jwt
-      const token = jwt.sign(
-        { email: newUser.email, id: newUser._id },
-        process.env.SECRET_KEY,
-        {
-          expiresIn: maxLimit,
-        }
-      );
-
-      //sending cookies as res
-      res.cookie("jwt", token, { httpOnly: true, maxLimit: maxLimit * 1000 });
-
-      //finally sending responce to the user created
-      res
-        .status(200)
-        .json({
-          message: "User created successfully",
-          user: newUser,
-          token: token,
-        });
+    } else {
+      res.status(400).json({
+        message: "Invalid User data",
+      });
     }
-  } catch (error) {
-    res
-      .status(500)
-      .send({ message: "something went wrong !!", error: error.toString() });
   }
+};
+
+export const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await UserModel.findOne({ email });
+  if (user && (await user.matchPasswords(password))) {
+    generateToken(res, user._id);
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    });
+  } else {
+    res.status(400).json({
+      message: "Invalid User data",
+    });
+  }
+};
+
+export const logoutUser = async (req, res) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  res.status(200).json({ message: "logout user" });
+};
+
+export const getUserProfile = async (req, res) => {
+  const user = {
+    _id: req.user._id,
+    name: req.user.name,
+    email: req.user.email,
+    phoneNumber: req.user.phoneNumber,
+    address: req.user.address,
+  };
+  res.status(200).json(user);
+};
+
+export const updateUserProfile = async (req, res) => {
+  const user = await UserModel.findById(req.user._id);
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.address = req.body.address || user.address;
+    user.phoneNumber = req.body.phoneNumber || user.address;
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      phoneNumber: updatedUser.phoneNumber,
+      address: updatedUser.address,
+    });
+  } else {
+    res.status(404).json({ message: "User not found" });
+  }
+  res.status(200).json({ message: "Update user" });
 };
