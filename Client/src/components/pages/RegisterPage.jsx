@@ -1,5 +1,9 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useRegisterMutation } from "../../slices/userSlice";
+import { setCrendentials } from "../../slices/authSlice";
+import { toast } from "react-toastify";
 
 const RegisterPage = () => {
   const [username, setUsername] = useState();
@@ -9,14 +13,39 @@ const RegisterPage = () => {
   const [address, setAddress] = useState();
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleClick = () => {
-    navigate("/login");
+  const [register, { isLoading }] = useRegisterMutation();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
+    }
+  }, [navigate, userInfo]);
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await register({
+        username,
+        email,
+        password,
+        address,
+        phoneNumber,
+      }).unwrap();
+      dispatch(setCrendentials({ ...res }));
+      toast("Login Sucessfully");
+      navigate("/");
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
   };
 
   return (
     <div>
-      <form method="post">
+      <form method="post" onSubmit={submitHandler}>
         <label htmlFor="username">Username</label>
         <input
           type="text"
@@ -62,9 +91,7 @@ const RegisterPage = () => {
           }}
           value={address}
         />
-        <button type="submit" onClick={handleClick}>
-          SignUp
-        </button>
+        <button type="submit">SignUp</button>
       </form>
     </div>
   );
