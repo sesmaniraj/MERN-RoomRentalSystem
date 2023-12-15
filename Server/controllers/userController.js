@@ -24,13 +24,13 @@ export const registerUser = async (req, res) => {
     });
 
     if (user) {
-      generateToken(res, newUser._id);
+      generateToken(res, user._id);
       res.status(201).json({
         _id: user._id,
-        username: newUser.username,
-        email: newUser.email,
-        address: newUser.address,
-        phoneNumber: newUser.phoneNumber,
+        username: user.username,
+        email: user.email,
+        address: user.address,
+        phoneNumber: user.phoneNumber,
       });
     } else {
       res.status(400).json({
