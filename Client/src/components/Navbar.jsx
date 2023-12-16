@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useLogoutMutation } from "../slices/userSlice";
 import { logout } from "../slices/authSlice";
+import "../styles/Navbar.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -21,17 +22,27 @@ const Navbar = () => {
     }
   };
   return (
-    <>
+    <div className="navbar">
       {userInfo ? (
         <>
-          <h1>welcome</h1>
-          <h2 onClick={logoutHandler} style={{ cursor: "pointer" }}>
-            Logout
-          </h2>
-          <Link to={"/admindashboard"}>AdminDashboard</Link>
-          <br />
-          <hr />
-          <Link to={"/ownerdashboard"}>OwnerDashboard</Link>
+          <Link to={"/"}>welcome</Link>
+
+          <div class="dropdown">
+            <button class="dropbtn">Profie</button>
+            <div class="dropdown-content">
+              <Link to={"/admindashboard"}>AdminDashboard</Link>
+              <hr />
+              <Link to={"/ownerdashboard"}>OwnerDashboard</Link>
+              <hr />
+              <h4
+                onClick={logoutHandler}
+                style={{ cursor: "pointer", textAlign: "center" }}
+              >
+                Logout
+              </h4>
+              <hr />
+            </div>
+          </div>
         </>
       ) : (
         <>
@@ -40,8 +51,7 @@ const Navbar = () => {
           <Link to={"/register"}>Register</Link>
         </>
       )}
-      <hr />
-    </>
+    </div>
   );
 };
 
