@@ -24,11 +24,14 @@ const Navbar = () => {
     <>
       {userInfo ? (
         <>
-          <h1>welcome {userInfo.username}</h1>
+          <h1>welcome</h1>
           <h2 onClick={logoutHandler} style={{ cursor: "pointer" }}>
             Logout
           </h2>
-          <Link to={"/admindashboard"}>Dashboard</Link>
+          <Link to={"/admindashboard"}>AdminDashboard</Link>
+          <br />
+          <hr />
+          <Link to={"/ownerdashboard"}>OwnerDashboard</Link>
         </>
       ) : (
         <>
