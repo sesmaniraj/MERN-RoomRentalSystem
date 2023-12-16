@@ -11,6 +11,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCrendentials: (state, action) => {
+      console.log(action.payload);
       state.userInfo = action.payload;
       localStorage.setItem("userInfo", JSON.stringify(action.payload));
     },

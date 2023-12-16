@@ -13,7 +13,7 @@ const OwnerDashboard = () => {
 
   const getLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.watchPosition(
+      navigator.geolocation.getCurrentPosition(
         (position) => {
           const latitude = position.coords.latitude;
           const longitude = position.coords.longitude;

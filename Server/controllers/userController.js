@@ -16,7 +16,6 @@ export const registerUser = async (req, res) => {
     const user = await UserModel.create({
       username,
       email,
-      username,
       password,
       address,
       phoneNumber,
@@ -67,13 +66,7 @@ export const logoutUser = async (req, res) => {
 };
 
 export const getUserProfile = async (req, res) => {
-  const user = {
-    _id: req.user._id,
-    name: req.user.name,
-    email: req.user.email,
-    phoneNumber: req.user.phoneNumber,
-    address: req.user.address,
-  };
+  const user = await UserModel.find();
   res.status(200).json(user);
 };
 
