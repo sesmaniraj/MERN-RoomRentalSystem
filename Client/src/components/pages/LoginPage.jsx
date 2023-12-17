@@ -46,6 +46,7 @@ const LoginPage = () => {
           }}
           value={email}
         />
+        <br />
         <label htmlFor="password">Password</label>
         <input
           type="password"
@@ -55,10 +56,11 @@ const LoginPage = () => {
           }}
           value={password}
         />
+        <br />
 
         {/* loader funcunality can be keep here */}
         {isLoading && <h1>Loading..</h1>}
-
+        <br />
         <button type="submit">LogIn</button>
       </form>
     </div>

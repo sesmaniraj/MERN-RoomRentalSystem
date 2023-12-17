@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useLogoutMutation } from "../slices/userSlice";
 import { logout } from "../slices/authSlice";
 import "../styles/Navbar.css";
-import axios from "axios";
 
 const Navbar = () => {
-  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -22,18 +20,9 @@ const Navbar = () => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    try {
-      const user = axios.get("http://localhost:8000/api/v1/profile");
-      setUser(user);
-    } catch (error) {}
-  }, []);
-  console.log(user);
-
-  if (!user) {
-    return <div>Loading...</div>;
-  }
-
+  let user = {
+    role: "admin",
+  };
   return (
     <div className="navbar">
       {userInfo ? (

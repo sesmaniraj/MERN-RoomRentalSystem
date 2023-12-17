@@ -11,6 +11,7 @@ const RegisterPage = () => {
   const [password, setPassword] = useState();
   const [phoneNumber, setPhoneNumber] = useState();
   const [address, setAddress] = useState();
+  const [selectedRole, setSelectedRole] = useState("user");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const RegisterPage = () => {
         password,
         address,
         phoneNumber,
+        selectedRole,
       }).unwrap();
       dispatch(setCrendentials({ ...res }));
       toast("Login Sucessfully");
@@ -55,6 +57,7 @@ const RegisterPage = () => {
           value={username}
           id="username"
         />
+        <br />
         <label htmlFor="email">Email</label>
         <input
           type="email"
@@ -64,6 +67,7 @@ const RegisterPage = () => {
           }}
           value={email}
         />
+        <br />
         <label htmlFor="password">Password</label>
         <input
           type="password"
@@ -73,6 +77,7 @@ const RegisterPage = () => {
           }}
           value={password}
         />
+        <br />
         <label htmlFor="phone_number">Phone Number</label>
         <input
           type="number"
@@ -82,6 +87,7 @@ const RegisterPage = () => {
           }}
           value={phoneNumber}
         />
+        <br />
         <label htmlFor="address">Address</label>
         <input
           type="text"
@@ -91,6 +97,29 @@ const RegisterPage = () => {
           }}
           value={address}
         />
+        <br />
+        <div>
+          <h1>Login As</h1>
+          <label htmlFor="owner">Owner</label>
+          <input
+            type="radio"
+            id="owner"
+            value={selectedRole}
+            checked={selectedRole === "owner"}
+            onChange={() => setSelectedRole("owner")}
+          />
+
+          <label htmlFor="user">User</label>
+          <input
+            type="radio"
+            id="user"
+            value={selectedRole}
+            checked={selectedRole === "user"}
+            onChange={() => setSelectedRole("user")}
+          />
+        </div>
+        <br />
+
         <button type="submit">SignUp</button>
       </form>
     </div>
