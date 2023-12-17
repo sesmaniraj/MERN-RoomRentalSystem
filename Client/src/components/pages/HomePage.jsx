@@ -5,7 +5,6 @@ import { useGetRoomQuery } from "../../slices/roomSlice";
 
 const HomePage = () => {
   const { data } = useGetRoomQuery();
-  console.log(data);
   if (!data) {
     return <p>Loading...</p>;
   }
