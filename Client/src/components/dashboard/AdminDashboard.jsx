@@ -1,12 +1,13 @@
 import { useGetQuery } from "../../slices/userSlice";
 import "./AdminDashboard.css";
+import RoomRegister from "../pages/RoomRegister";
 
 const AdminDashboard = () => {
   const { data } = useGetQuery();
   if (!data) {
-    // Data is still loading, or there was an error
-    return <p>Loading...</p>; // You can customize this based on your needs
+    return <p>Loading...</p>;
   }
+
   return (
     <>
       <ul>
@@ -27,6 +28,8 @@ const AdminDashboard = () => {
           </li>
         ))}
       </ul>
+      <hr />
+      <RoomRegister />
     </>
   );
 };

@@ -26,7 +26,7 @@ export const registerRoom = async (req, res) => {
 export const getRoom = async (req, res) => {
   try {
     const rooms = await RoomModel.find();
-    res.status(201).json({ rooms });
+    res.status(201).json(rooms);
   } catch (error) {
     res.status(404).json({ message: "Room not found" });
   }

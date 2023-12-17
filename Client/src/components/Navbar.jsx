@@ -25,11 +25,13 @@ const Navbar = () => {
     <div className="navbar">
       {userInfo ? (
         <>
-          <Link to={"/"}>welcome</Link>
+          <Link to={"/"}>
+            <h1>welcome</h1>
+          </Link>
 
-          <div class="dropdown">
-            <button class="dropbtn">Profie</button>
-            <div class="dropdown-content">
+          <div className="dropdown">
+            <button className="dropbtn">x</button>
+            <div className="dropdown-content">
               <Link to={"/admindashboard"}>AdminDashboard</Link>
               <hr />
               <Link to={"/ownerdashboard"}>OwnerDashboard</Link>

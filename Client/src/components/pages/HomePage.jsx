@@ -1,12 +1,19 @@
 import React from "react";
 import "./Homepage.css";
+import Card from "../utils/Card";
+import { useGetRoomQuery } from "../../slices/roomSlice";
 
 const HomePage = () => {
+  const { data } = useGetRoomQuery();
+  console.log(data);
+  if (!data) {
+    return <p>Loading...</p>;
+  }
   return (
     <>
-      <div id="home">
-        <h1>Welcome to room rental system</h1>
-      </div>
+      {data.map((room) => (
+        <Card key={room._id} room={room} />
+      ))}
     </>
   );
 };
