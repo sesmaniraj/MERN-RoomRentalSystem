@@ -6,10 +6,10 @@ const roomSchema = new mongoose.Schema(
     description: { type: String, required: true },
     price: { type: Number, required: true },
     location: {
-      type: Number,
+      type: String,
       required: true,
     },
-    available: { type: Boolean, default: true },
+    available: { type: String, default: true },
   },
   { timestamps: true }
 );

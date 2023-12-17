@@ -6,6 +6,7 @@ dotenv.config();
 import cors from "cors";
 import { connectDB } from "./database/db.js";
 import userRoute from "./routes/userRoutes.js";
+import roomRoutes from "./routes/roomRoute.js";
 
 //app created for server
 const app = express();
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //routes
 app.use("/api/v1", userRoute);
+app.use("/api/v1", roomRoutes);
 
 const port = process.env.PORT;
 app.listen(port, (req, res) => {
