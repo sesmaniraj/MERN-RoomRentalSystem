@@ -1,6 +1,5 @@
 import React from "react";
 import "./Homepage.css";
-import Card from "../utils/Card";
 import { useGetRoomQuery } from "../../slices/roomSlice";
 
 const HomePage = () => {
@@ -13,6 +12,7 @@ const HomePage = () => {
       {data.map((room) => (
         <Card key={room._id} room={room} />
       ))}
+      <h1>Homepage</h1>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useLogoutMutation } from "../slices/userSlice";
@@ -8,7 +8,6 @@ import "../styles/Navbar.css";
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const [logoutApiCall] = useLogoutMutation();
   const { userInfo } = useSelector((state) => state.auth);
   const logoutHandler = async () => {
@@ -20,47 +19,41 @@ const Navbar = () => {
       console.log(error);
     }
   };
-  let user = {
-    role: "admin",
-  };
   return (
-    <div className="navbar">
-      {userInfo ? (
-        <>
-          <Link to={"/"}>
-            <h1>welcome</h1>
-          </Link>
+    <>
+      <div className="navbar">
+        {userInfo ? (
+          <>
+            <Link to={"/"}>
+              <h1>welcome</h1>
+            </Link>
 
-          <div className="dropdown">
-            <button className="dropbtn">x</button>
-            <div className="dropdown-content">
-              {user.role === "admin" && (
+            <div className="dropdown">
+              <button className="dropbtn">x</button>
+              <div className="dropdown-content">
                 <Link to={"/admindashboard"}>AdminDashboard</Link>
-              )}
-              {user.role === "owner" && (
                 <Link to={"/ownerdashboard"}>OwnerDashboard</Link>
-              )}
-
-              <hr />
-              <hr />
-              <h4
-                onClick={logoutHandler}
-                style={{ cursor: "pointer", textAlign: "center" }}
-              >
-                Logout
-              </h4>
-              <hr />
+                <hr />
+                <hr />
+                <h4
+                  onClick={logoutHandler}
+                  style={{ cursor: "pointer", textAlign: "center" }}
+                >
+                  Logout
+                </h4>
+                <hr />
+              </div>
             </div>
-          </div>
-        </>
-      ) : (
-        <>
-          {" "}
-          <Link to={"/login"}>Login</Link>
-          <Link to={"/register"}>Register</Link>
-        </>
-      )}
-    </div>
+          </>
+        ) : (
+          <>
+            {" "}
+            <Link to={"/login"}>Login</Link>
+            <Link to={"/register"}>Register</Link>
+          </>
+        )}
+      </div>
+    </>
   );
 };
 

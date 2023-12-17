@@ -24,13 +24,7 @@ export const registerUser = async (req, res) => {
 
     if (user) {
       generateToken(res, user._id);
-      res.status(201).json({
-        _id: user._id,
-        username: user.username,
-        email: user.email,
-        address: user.address,
-        phoneNumber: user.phoneNumber,
-      });
+      res.status(201).json({ user });
     } else {
       res.status(400).json({
         message: "Invalid User data",
@@ -67,7 +61,7 @@ export const logoutUser = async (req, res) => {
 
 export const getUserProfile = async (req, res) => {
   const user = await UserModel.find();
-  res.status(200).json(user);
+  res.status(200).json({ user });
 };
 
 export const updateUserProfile = async (req, res) => {

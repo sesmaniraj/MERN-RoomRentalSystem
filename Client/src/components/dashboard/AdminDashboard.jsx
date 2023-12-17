@@ -1,17 +1,12 @@
-import { useGetQuery } from "../../slices/userSlice";
+import React from "react";
 import "./AdminDashboard.css";
 import RoomRegister from "../pages/RoomRegister";
 
 const AdminDashboard = () => {
-  const { data } = useGetQuery();
-  if (!data) {
-    return <p>Loading...</p>;
-  }
-
   return (
     <>
-      <ul>
-        {data.map((item) => (
+      {/* <ul>
+        {userData.map((item) => (
           <li key={item._id}>
             <table>
               <tr>
@@ -27,7 +22,7 @@ const AdminDashboard = () => {
             </table>
           </li>
         ))}
-      </ul>
+      </ul> */}
       <hr />
       <RoomRegister />
     </>
