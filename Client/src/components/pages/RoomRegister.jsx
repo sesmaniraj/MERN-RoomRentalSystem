@@ -10,19 +10,8 @@ const RoomRegister = () => {
   };
   return (
     <div>
-      {" "}
-      <h1 style={{ marginTop: "50px" }}>Register your room here</h1>
-      <form
-        action=""
-        onSubmit={submitHandler}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          maxWidth: "600px",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+      <h1>Register your room here</h1>
+      <form action="" onSubmit={submitHandler}>
         <input type="text" placeholder="Enter Name" />
         <input type="text" placeholder="Description" />
         <input type="text" placeholder="Enter Location" />
