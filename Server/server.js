@@ -19,11 +19,22 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+const port = process.env.PORT;
+app.listen(port, (req, res) => {
+  console.log(`Server is started at the port : ${port}`);
+});
+
 //routes
 app.use("/api/v1", userRoute);
 app.use("/api/v1", roomRoutes);
 
-const port = process.env.PORT;
-app.listen(port, (req, res) => {
-  console.log(`Server is started at the port : ${port}`);
+//errormiddleware
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal server error";
+  return res.status(statusCode).json({
+    message,
+    success: false,
+    statusCode,
+  });
 });

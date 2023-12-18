@@ -1,35 +1,24 @@
 import UserModel from "../models/userModel.js";
-import { generateToken } from "../utils/generateTokens.js";
+import bcrypt from "bcrypt";
+import { errorHandler } from "../utils/error.js";
 
-//for signup
-export const registerUser = async (req, res) => {
+//for signUp
+export const registerUser = async (req, res, next) => {
   const { username, email, password, phoneNumber, address, role } = req.body;
-
-  //to check if the user is existing or not
-  const existingUser = await UserModel.findOne({
-    email: email,
+  const hashedPassword = bcrypt.hashSync(password, 10);
+  //now creating the new user
+  const newUser = new UserModel({
+    username,
+    email,
+    password: hashedPassword,
+    phoneNumber,
+    address,
   });
-  if (existingUser) {
-    res.status(400).json({ message: "User already exists" });
-  } else {
-    //now creating the new user
-    const user = await UserModel.create({
-      username,
-      email,
-      password,
-      address,
-      phoneNumber,
-      role,
-    });
-
-    if (user) {
-      generateToken(res, user._id);
-      res.status(201).json({ user });
-    } else {
-      res.status(400).json({
-        message: "Invalid User data",
-      });
-    }
+  try {
+    await newUser.save();
+    res.status(201).json({ messsage: "User Register successfully" });
+  } catch (error) {
+    next(error);
   }
 };
 
