@@ -6,6 +6,7 @@ import {
   signInSucess,
 } from "../../slices/userSlice";
 import { useSelector, useDispatch } from "react-redux";
+import Oauth from "../Oauth";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState();
@@ -69,6 +70,7 @@ const LoginPage = () => {
         >
           {loading ? "Loading.." : "Login"}
         </button>
+        <Oauth />
       </form>
       <div className="flex gap-3 mt-3 mx-auto">
         <p>Dont have an account ?</p>{" "}
