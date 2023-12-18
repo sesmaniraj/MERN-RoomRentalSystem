@@ -1,17 +1,24 @@
 import { React, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  signInFaliure,
+  signInStart,
+  signInSucess,
+} from "../../slices/userSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState();
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
   console.log(formData);
   const submitHandler = async (e) => {
     e.preventDefault();
+    dispatch(signInStart());
     try {
       const res = await fetch("/api/v1/login", {
         method: "POST",
@@ -22,18 +29,13 @@ const LoginPage = () => {
       });
       const data = await res.json();
       if (data.success === false) {
-        setLoading(false);
-        setError(data.message);
+        dispatch(signInFaliure(data.message));
         return;
       }
-      setLoading(false);
-      setError(null);
+      dispatch(signInSucess(data));
       navigate("/");
-      console.log("login successfully");
-      console.log(data);
-    } catch (error) {
-      setLoading(false);
-      setError(error.message);
+    } catch (err) {
+      dispatch(signInFaliure(error.message));
     }
   };
 
