@@ -9,6 +9,7 @@ import RegisterPage from "./components/pages/RegisterPage.jsx";
 import AdminDashboard from "./components/dashboard/AdminDashboard.jsx";
 import OwnerDashboard from "./components/dashboard/OwnerDashboard.jsx";
 import ProfilePage from "./components/pages/ProfilePage.jsx";
+import PrivateRoute from "./components/private/PrivateRoute.jsx";
 
 const App = () => {
   return (
@@ -22,7 +23,9 @@ const App = () => {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/admindashboard" element={<AdminDashboard />} />
           <Route path="/ownerdashboard" element={<OwnerDashboard />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/profile" element={<ProfilePage />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>
