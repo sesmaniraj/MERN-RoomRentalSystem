@@ -1,57 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { useLogoutMutation } from "../slices/userSlice";
-import { logout } from "../slices/authSlice";
-import "../styles/Navbar.css";
+import React from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [logoutApiCall] = useLogoutMutation();
-  const { userInfo } = useSelector((state) => state.auth);
-  const logoutHandler = async () => {
-    try {
-      await logoutApiCall().unwrap();
-      dispatch(logout());
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <>
-      <div className="navbar">
-        {userInfo ? (
-          <>
-            <Link to={"/"}>
-              <h1>welcome</h1>
-            </Link>
-
-            <div className="dropdown">
-              <button className="dropbtn">x</button>
-              <div className="dropdown-content">
-                <Link to={"/admindashboard"}>AdminDashboard</Link>
-                <Link to={"/ownerdashboard"}>OwnerDashboard</Link>
-                <hr />
-                <hr />
-                <h4
-                  onClick={logoutHandler}
-                  style={{ cursor: "pointer", textAlign: "center" }}
-                >
-                  Logout
-                </h4>
-                <hr />
-              </div>
-            </div>
-          </>
-        ) : (
-          <>
-            {" "}
-            <Link to={"/login"}>Login</Link>
-            <Link to={"/register"}>Register</Link>
-          </>
-        )}
+      <div className=" p-6 max-w-l mx-auto bg-sky-400  shadow-lg flex items-center justify-between space-x-4 text-red">
+        <div>
+          <Link to={"/"}>
+            <h1 className="text-lg font-bold">RoomRentalSystem</h1>
+          </Link>
+        </div>
+        <div className="px-2 font-semibold">
+          <Link to={"/login"} className="mx-7">
+            Login
+          </Link>
+          <Link to={"/register"}>Register</Link>
+        </div>
       </div>
     </>
   );

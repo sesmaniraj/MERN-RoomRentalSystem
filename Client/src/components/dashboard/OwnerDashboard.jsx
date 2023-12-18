@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import "./OwnerDashboard.css";
 import { useNavigate } from "react-router-dom";
 
 const OwnerDashboard = () => {

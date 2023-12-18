@@ -1,18 +1,12 @@
 import React from "react";
-import "./Homepage.css";
-import { useGetRoomQuery } from "../../slices/roomSlice";
 
 const HomePage = () => {
-  const { data } = useGetRoomQuery();
-  if (!data) {
-    return <p>Loading...</p>;
-  }
   return (
     <>
-      {data.map((room) => (
-        <Card key={room._id} room={room} />
-      ))}
-      <h1>Homepage</h1>
+      <h1 className="bg-stone-500 flex item-center justify-center">
+        {" "}
+        Homepage
+      </h1>
     </>
   );
 };
