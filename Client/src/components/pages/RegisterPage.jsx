@@ -93,7 +93,7 @@ const RegisterPage = () => {
           disabled={loading}
           className="bg-sky-400 my-5 rounded-md disabled:opacity-80"
         >
-          {loading ? "Loading.." : "Sign Up"}
+          {loading ? "Loading.." : "Register"}
         </button>
       </form>
       <div className="flex gap-3 mt-3 mx-auto">
