@@ -7,15 +7,6 @@ const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
-  const handleProfile = () => {
-    navigate("/profile");
-  };
-  const handleAdminDashbord = () => {
-    navigate("/admindashboard");
-  };
-  const handleOwnerDashbord = () => {
-    navigate("/ownerdashboard");
-  };
 
   const toogleDropdown = () => {
     setIsOpen(!isOpen);
@@ -37,30 +28,32 @@ const Navbar = () => {
                 {isOpen && (
                   <div className="my-10">
                     <div>
-                      <a
-                        onClick={handleProfile}
+                      <Link
+                        to={"/profile"}
                         className="block  py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                       >
                         Profile
-                      </a>
-                      <a
-                        onClick={handleAdminDashbord}
-                        className="block  py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                      >
-                        Admin Dashboard
-                      </a>
-                      <a
-                        onClick={handleOwnerDashbord}
-                        className="block  py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                      >
-                        Owner Dashbord
-                      </a>
-                      <a
-                        onClick={handleOwnerDashbord}
-                        className="block  py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                      >
+                      </Link>
+                      {currentUser.role == "admin" && (
+                        <Link
+                          to={"/admindashboard"}
+                          className="block  py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                        >
+                          Admin Dashboard
+                        </Link>
+                      )}
+                      {currentUser.role == "owner" && (
+                        <Link
+                          to={"/ownerdashboard"}
+                          className="block  py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                        >
+                          Owner Dashbord
+                        </Link>
+                      )}
+
+                      <Link className="block  py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
                         Log Out
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 )}
