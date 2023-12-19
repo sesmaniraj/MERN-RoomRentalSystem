@@ -44,11 +44,8 @@ export const loginUser = async (req, res, next) => {
 };
 
 export const logoutUser = async (req, res) => {
-  res.cookie("jwt", "", {
-    httpOnly: true,
-    expires: new Date(0),
-  });
-  res.status(200).json({ message: "logout user" });
+  res.clearCookie("access_token");
+  res.status(200).json({ message: "user has benn logged out" });
 };
 
 export const getUserProfile = async (req, res) => {

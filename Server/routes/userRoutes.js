@@ -15,7 +15,7 @@ const router = express.Router();
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/google", google);
-router.post("/logout", logoutUser);
+router.get("/logout", logoutUser);
 router.get("/profile", getUserProfile);
 router.put("/update", protect, updateUserProfile);
 router.post("/google", google);
