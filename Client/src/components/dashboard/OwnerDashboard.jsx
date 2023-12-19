@@ -46,7 +46,7 @@ const OwnerDashboard = () => {
   return (
     <div>
       <h1>Owner Dashboard</h1>
-      <div className="owner-dash-container">
+      <div className="flex items-center">
         <form method="Post" className="ow-dash-form">
           <label>
             <h2>Choose Rent For</h2>

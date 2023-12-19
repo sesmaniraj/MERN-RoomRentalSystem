@@ -62,9 +62,8 @@ const ProfilePage = () => {
             {loading ? "Loading.." : "UpdateUser"}
           </button>
         </form>
-        <div className="mx-auto flex">
-          <span className="mx-20">Delete Account</span>
-          <span className="mx-20">Logout Account</span>
+        <div className="mx-auto">
+          <h1>Delete Account</h1>
         </div>
       </div>
     </>
