@@ -1,15 +1,32 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutStart, logoutSucess, logoutFaliure } from "../slices/userSlice";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const toogleDropdown = () => {
     setIsOpen(!isOpen);
+  };
+  const handleLogout = async () => {
+    dispatch(logoutStart());
+    try {
+      const res = await fetch("/api/v1/logout");
+      const data = res.json();
+      if (data.success === false) {
+        dispatch(logoutFaliure(data.message));
+        return;
+      }
+      dispatch(logoutSucess(""));
+      navigate("/login");
+    } catch (error) {
+      dispatch(loginFaliure(error.message));
+    }
   };
 
   return (
@@ -52,7 +69,7 @@ const Navbar = () => {
                       )}
 
                       <Link className="block  py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                        Log Out
+                        <span onClick={handleLogout}>Logout</span>
                       </Link>
                     </div>
                   </div>
