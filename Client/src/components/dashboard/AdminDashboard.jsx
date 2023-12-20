@@ -4,7 +4,7 @@ import RoomRegister from "../pages/RoomRegister";
 const AdminDashboard = () => {
   return (
     <>
-      <h1>Admin</h1>
+      
       <RoomRegister />
     </>
   );
