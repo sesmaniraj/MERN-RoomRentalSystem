@@ -4,6 +4,9 @@ import {
   updateUserStart,
   updateUserFaliure,
   updateUserSucess,
+  deleteUserFaliure,
+  deleteUserStart,
+  deleteUserSucess,
 } from "../../slices/userSlice";
 
 const ProfilePage = () => {
@@ -33,6 +36,22 @@ const ProfilePage = () => {
       dispatch(updateUserSucess(data));
     } catch (error) {
       dispatch(updateUserFaliure(error.message));
+    }
+  };
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart);
+      const res = await fetch(`/api/v1/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.sucess === false) {
+        dispatch(deleteUserFaliure(data.message));
+        return;
+      }
+      dispatch(deleteUserSucess(data));
+    } catch (error) {
+      dispatch(deleteUserFaliure(error.message));
     }
   };
   return (
@@ -95,7 +114,9 @@ const ProfilePage = () => {
           </button>
         </form>
         <div className="mx-auto">
-          <h1>Delete Account</h1>
+          <span onClick={handleDeleteUser} className="pointer">
+            Delete Account
+          </span>
         </div>
       </div>
     </>
