@@ -1,12 +1,40 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import {
+  updateUserStart,
+  updateUserFaliure,
+  updateUserSucess,
+} from "../../slices/userSlice";
 
 const ProfilePage = () => {
-  const { currentUser, loading } = useSelector((state) => state.user);
-  const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
+  const [formData, setFormData] = useState();
   const dispatch = useDispatch();
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
+    try {
+      dispatch(updateUserStart());
+      const res = await fetch(`/api/v1/update/${currentUser._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (data.sucess === false) {
+        dispatch(updateUserFaliure(data.message));
+        return;
+      }
+      dispatch(updateUserSucess(data));
+    } catch (error) {
+      dispatch(updateUserFaliure(error.message));
+    }
+  };
   return (
     <>
       <div>
@@ -18,13 +46,14 @@ const ProfilePage = () => {
       </div>
       <div className="  flex flex-col justify-between item-center my-7">
         <h1 className="text-lg font-bold mx-auto">User Profile</h1>
-        <form className="flex flex-col mx-auto  ">
+        <form onSubmit={handleSubmit} className="flex flex-col mx-auto  ">
           <label htmlFor="email">Username</label>
           <input
             type="text"
             id="username"
             className="border-solid border-2 border-sky-500 outline-none rounded-md"
             defaultValue={currentUser.username}
+            onChange={handleChange}
           />
           <label htmlFor="email">Email</label>
           <input
@@ -32,12 +61,14 @@ const ProfilePage = () => {
             id="email"
             className="border-solid border-2 border-sky-500 outline-none rounded-md"
             defaultValue={currentUser.email}
+            onChange={handleChange}
           />
           <label htmlFor="email">Password</label>
           <input
             type="password"
             id="password"
             className="border-solid border-2 border-sky-500 outline-none rounded-md"
+            onChange={handleChange}
           />
           <label htmlFor="email">Address</label>
           <input
@@ -45,6 +76,7 @@ const ProfilePage = () => {
             id="address"
             className="border-solid border-2 border-sky-500 outline-none rounded-md"
             defaultValue={currentUser.address}
+            onChange={handleChange}
           />
           <label htmlFor="password">PhoneNumber</label>
           <input
@@ -52,14 +84,14 @@ const ProfilePage = () => {
             id="phoneNumber"
             className="border-solid border-2 border-sky-500 outline-none rounded-md"
             defaultValue={currentUser.phoneNumber}
+            onChange={handleChange}
           />
 
           <button
             type="submit"
-            disabled={loading}
             className="bg-sky-400 my-5 rounded-md disabled:opacity-80"
           >
-            {loading ? "Loading.." : "UpdateUser"}
+            Update
           </button>
         </form>
         <div className="mx-auto">
