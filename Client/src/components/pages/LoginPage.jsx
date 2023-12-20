@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   signInFaliure,
@@ -18,8 +18,9 @@ const LoginPage = () => {
   };
   const submitHandler = async (e) => {
     e.preventDefault();
-    dispatch(signInStart());
+
     try {
+      dispatch(signInStart());
       const res = await fetch("/api/v1/login", {
         method: "POST",
         headers: {
@@ -35,9 +36,10 @@ const LoginPage = () => {
       dispatch(signInSucess(data));
       navigate("/");
     } catch (err) {
-      dispatch(signInFaliure(error.message));
+      console.log(err);
     }
   };
+  useEffect(() => {});
 
   return (
     <div className="  flex flex-col justify-between item-center my-7">
@@ -77,6 +79,7 @@ const LoginPage = () => {
           <span className="text-blue-700">Register</span>
         </Link>
       </div>
+      <div className="mx-auto text-red-600">{error ? <p>{error}</p> : ""}</div>
     </div>
   );
 };

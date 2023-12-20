@@ -104,7 +104,13 @@ const RegisterPage = () => {
           <span className="text-blue-700">Login</span>
         </Link>
       </div>
-      {error ? <p className="text-red-500 mt-5">Something went wrong</p> : ""}
+      <div className="mx-auto text-red-600">
+        {error ? (
+          <p className="text-red-500 mt-5">Please fill add credentials.</p>
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 };

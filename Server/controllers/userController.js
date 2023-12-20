@@ -15,6 +15,9 @@ export const registerUser = async (req, res, next) => {
     phoneNumber,
     address,
   });
+  if (!email) {
+    return res.status(400).json({ message: "Input field are required" });
+  }
   try {
     await newUser.save();
     res.status(201).json({ messsage: "User Register successfully" });
