@@ -107,3 +107,17 @@ export const google = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deleteUserProfile = async (req, res, next) => {
+  if (req.user.id !== req.params.id)
+    return next(errorHandler(401, "Only can update your own account"));
+  try {
+    if (req.body.password) {
+      req.body.password = bcrypt.hashSync(req.body.password, 10);
+    }
+    await UserModel.findByIdAndDelete(req.params.id);
+    res.status(200).json("User deleted successfully");
+  } catch (error) {
+    next(error);
+  }
+};
