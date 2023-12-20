@@ -1,13 +1,8 @@
 import express from "express";
-import {
-  getRoom,
-  getRoomById,
-  registerRoom,
-} from "../controllers/roomController.js";
+import { registerRoom } from "../controllers/roomController.js";
+import { verifyToken } from "../utils/verifyUser.js";
 const roomRouter = express.Router();
 
-roomRouter.post("/registerroom", registerRoom);
-roomRouter.get("/getroom", getRoom);
-roomRouter.get("/getroom/:id", getRoomById);
+roomRouter.post("/registerroom", verifyToken, registerRoom);
 
 export default roomRouter;
