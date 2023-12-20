@@ -3,11 +3,10 @@ import {
   loginUser,
   registerUser,
   logoutUser,
-  getUserProfile,
   updateUserProfile,
   google,
 } from "../controllers/userController.js";
-import { protect } from "../middleware/authMiddleware.js";
+import { verifyToken } from "../utils/verifyUser.js";
 const router = express.Router();
 
 //API FOR USER
@@ -16,8 +15,6 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/google", google);
 router.get("/logout", logoutUser);
-router.get("/profile", getUserProfile);
-router.put("/update", protect, updateUserProfile);
-router.post("/google", google);
+router.post("/update/:id", verifyToken, updateUserProfile);
 
 export default router;

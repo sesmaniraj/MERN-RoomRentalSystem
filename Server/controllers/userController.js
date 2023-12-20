@@ -48,34 +48,32 @@ export const logoutUser = async (req, res) => {
   res.status(200).json({ message: "user has benn logged out" });
 };
 
-export const getUserProfile = async (req, res) => {
-  const user = await UserModel.find();
-  res.status(200).json({ user });
-};
-
-export const updateUserProfile = async (req, res) => {
-  const user = await UserModel.findById(req.user._id);
-  if (user) {
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-    user.address = req.body.address || user.address;
-    user.phoneNumber = req.body.phoneNumber || user.address;
+export const updateUserProfile = async (req, res, next) => {
+  if (req.user.id !== req.params.id)
+    return next(errorHandler(401, "Only can update your own account"));
+  try {
     if (req.body.password) {
-      user.password = req.body.password;
+      req.body.password = bcrypt.hashSync(req.body.password, 10);
+      const updatedUser = await UserModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          $set: {
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password,
+            address: req.body.address,
+            phoneNumber: req.bodyphoneNumber,
+            avatar: req.body.avatar,
+          },
+        },
+        { new: true }
+      );
+      const { password, ...rest } = updatedUser._doc;
+      res.status(200).json(rest);
     }
-    const updatedUser = await user.save();
-
-    res.status(200).json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      phoneNumber: updatedUser.phoneNumber,
-      address: updatedUser.address,
-    });
-  } else {
-    res.status(404).json({ message: "User not found" });
+  } catch (error) {
+    next(error);
   }
-  res.status(200).json({ message: "Update user" });
 };
 
 export const google = async (req, res, next) => {
