@@ -63,13 +63,13 @@ export const updateUserProfile = async (req, res, next) => {
           email: req.body.email,
           password: req.body.password,
           address: req.body.address,
-          phoneNumber: req.bodyphoneNumber,
+          phoneNumber: req.body.phoneNumber,
           avatar: req.body.avatar,
         },
       },
       { new: true }
     );
-    const { password: pass, ...rest } = updatedUser._doc;
+    const { password, ...rest } = updatedUser._doc;
     res.status(200).json(rest);
   } catch (error) {
     next(error);
