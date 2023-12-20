@@ -15,6 +15,9 @@ export const registerUser = async (req, res, next) => {
     phoneNumber,
     address,
   });
+  if (!email) {
+    return res.status(400).json({ message: "Input field are required" });
+  }
   try {
     await newUser.save();
     res.status(201).json({ messsage: "User Register successfully" });
@@ -48,34 +51,32 @@ export const logoutUser = async (req, res) => {
   res.status(200).json({ message: "user has benn logged out" });
 };
 
-export const getUserProfile = async (req, res) => {
-  const user = await UserModel.find();
-  res.status(200).json({ user });
-};
-
-export const updateUserProfile = async (req, res) => {
-  const user = await UserModel.findById(req.user._id);
-  if (user) {
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-    user.address = req.body.address || user.address;
-    user.phoneNumber = req.body.phoneNumber || user.address;
+export const updateUserProfile = async (req, res, next) => {
+  if (req.user.id !== req.params.id)
+    return next(errorHandler(401, "Only can update your own account"));
+  try {
     if (req.body.password) {
-      user.password = req.body.password;
+      req.body.password = bcrypt.hashSync(req.body.password, 10);
     }
-    const updatedUser = await user.save();
-
-    res.status(200).json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      phoneNumber: updatedUser.phoneNumber,
-      address: updatedUser.address,
-    });
-  } else {
-    res.status(404).json({ message: "User not found" });
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          username: req.body.username,
+          email: req.body.email,
+          password: req.body.password,
+          address: req.body.address,
+          phoneNumber: req.body.phoneNumber,
+          avatar: req.body.avatar,
+        },
+      },
+      { new: true }
+    );
+    const { password, ...rest } = updatedUser._doc;
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
   }
-  res.status(200).json({ message: "Update user" });
 };
 
 export const google = async (req, res, next) => {
@@ -85,7 +86,7 @@ export const google = async (req, res, next) => {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = user._doc;
       res
-        .cookie("acces_token", token, { httpOnly: true })
+        .cookie("access_token", token, { httpOnly: true })
         .status(200)
         .json(rest);
     } else {
@@ -99,12 +100,24 @@ export const google = async (req, res, next) => {
       });
       await newUser.save();
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
-      const { password: pass, ...rest } = user._doc;
+      const { password: pass, ...rest } = newUser._doc;
       res
-        .cookie("acces_token", token, { httpOnly: true })
+        .cookie("access_token", token, { httpOnly: true })
         .status(200)
         .json(rest);
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteUserProfile = async (req, res, next) => {
+  if (req.user.id !== req.params.id)
+    return next(errorHandler(401, "Only can delete your own account"));
+  try {
+    await UserModel.findByIdAndDelete(req.params.id);
+    res.clearCookie("access_token");
+    res.status(200).json("User deleted successfully");
   } catch (error) {
     next(error);
   }
