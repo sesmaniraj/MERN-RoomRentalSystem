@@ -58,7 +58,7 @@ const Navbar = () => {
                         <Link
                           to={"/admindashboard"}
                           className="nav-item"
-                        >
+                        ><IconLayoutDashboard className='icon'/>
                           <span>Dashboard</span>
                           
                         </Link>
@@ -74,7 +74,7 @@ const Navbar = () => {
                       )}
 
                       <Link  className="nav-item" >
-                      <IconLogout className='icon'/>
+                      <IconLogout className='icon' onClick={handleLogout}/>
                         <span onClick={handleLogout} >Logout</span>
                       </Link>
                       </div>
