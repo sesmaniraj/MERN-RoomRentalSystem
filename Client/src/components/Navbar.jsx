@@ -1,18 +1,19 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutStart, logoutSucess, logoutFaliure } from "../slices/userSlice";
-
+import './Navbar.css'
+import IconLayoutDashboard from "../icons/DashboardIcon";
+import IconLogout from "../icons/LogoutIcon";
+import IconProfile from "../icons/ProfileIcon";
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  
   const { currentUser } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const toogleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+ 
   const handleLogout = async () => {
     dispatch(logoutStart());
     try {
@@ -31,50 +32,55 @@ const Navbar = () => {
 
   return (
     <>
-      <div className=" p-6 max-w-l mx-auto bg-sky-400  shadow-lg flex items-center justify-between space-x-4 text-red">
+      <div className="p-6 max-w-l mx-auto bg-sky-400  shadow-lg flex items-start flex-col">
         <div>
           <Link to={"/"}>
             <h1 className="text-lg font-bold">RoomRentalSystem</h1>
           </Link>
         </div>
-        <div className="px-2 font-semibold">
+        <div >
           {currentUser ? (
             <>
-              <div className="w-12 h-11 shadow-xl">
-                <img src={currentUser.avatar} alt="" onClick={toogleDropdown} />
-                {isOpen && (
-                  <div className="my-10">
-                    <div>
+              
+                { (
+                  <div className="nav">
+                  <div className="nav-content" >
+                    
                       <Link
+                      
                         to={"/profile"}
-                        className="block  py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                        className="nav-item"
                       >
-                        Profile
+                       
+                       <img src={currentUser.avatar} alt=""   className="w-[3em] h-[3em] icon"/> <span>Profile</span>
                       </Link>
                       {currentUser.role == "admin" && (
                         <Link
                           to={"/admindashboard"}
-                          className="block  py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                          className="nav-item"
                         >
-                          Admin Dashboard
+                          <span>Dashboard</span>
+                          
                         </Link>
                       )}
                       {currentUser.role == "owner" && (
                         <Link
                           to={"/ownerdashboard"}
-                          className="block  py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                          className="nav-item "
                         >
-                          Owner Dashbord
+                         <IconLayoutDashboard className='icon'/><span >Dashboard</span>
+                          
                         </Link>
                       )}
 
-                      <Link className="block  py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                        <span onClick={handleLogout}>Logout</span>
+                      <Link  className="nav-item" >
+                      <IconLogout className='icon'/>
+                        <span onClick={handleLogout} >Logout</span>
                       </Link>
-                    </div>
+                      </div>
                   </div>
                 )}
-              </div>
+             
             </>
           ) : (
             <>
