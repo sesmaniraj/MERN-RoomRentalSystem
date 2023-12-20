@@ -83,7 +83,7 @@ export const google = async (req, res, next) => {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = user._doc;
       res
-        .cookie("acces_token", token, { httpOnly: true })
+        .cookie("access_token", token, { httpOnly: true })
         .status(200)
         .json(rest);
     } else {
@@ -97,9 +97,9 @@ export const google = async (req, res, next) => {
       });
       await newUser.save();
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
-      const { password: pass, ...rest } = user._doc;
+      const { password: pass, ...rest } = newUser._doc;
       res
-        .cookie("acces_token", token, { httpOnly: true })
+        .cookie("access_token", token, { httpOnly: true })
         .status(200)
         .json(rest);
     }
@@ -110,12 +110,10 @@ export const google = async (req, res, next) => {
 
 export const deleteUserProfile = async (req, res, next) => {
   if (req.user.id !== req.params.id)
-    return next(errorHandler(401, "Only can update your own account"));
+    return next(errorHandler(401, "Only can delete your own account"));
   try {
-    if (req.body.password) {
-      req.body.password = bcrypt.hashSync(req.body.password, 10);
-    }
     await UserModel.findByIdAndDelete(req.params.id);
+    res.clearCookie("access_token");
     res.status(200).json("User deleted successfully");
   } catch (error) {
     next(error);

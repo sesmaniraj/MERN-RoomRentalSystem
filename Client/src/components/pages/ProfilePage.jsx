@@ -40,7 +40,7 @@ const ProfilePage = () => {
   };
   const handleDeleteUser = async () => {
     try {
-      dispatch(deleteUserStart);
+      dispatch(deleteUserStart());
       const res = await fetch(`/api/v1/delete/${currentUser._id}`, {
         method: "DELETE",
       });
