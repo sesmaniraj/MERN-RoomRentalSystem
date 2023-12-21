@@ -2,18 +2,16 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutStart, logoutSucess, logoutFaliure } from "../slices/userSlice";
-import './Navbar.css'
+import "./Navbar.css";
 import IconLayoutDashboard from "../icons/DashboardIcon";
 import IconLogout from "../icons/LogoutIcon";
 import IconProfile from "../icons/ProfileIcon";
 const Navbar = () => {
-  
   const { currentUser } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
- 
   const handleLogout = async () => {
     dispatch(logoutStart());
     try {
@@ -38,56 +36,49 @@ const Navbar = () => {
             <h1 className="text-lg font-bold">RoomRentalSystem</h1>
           </Link>
         </div>
-        <div >
+        <div>
           {currentUser ? (
             <>
-              
-                { (
-                  <div className="nav">
-                  <div className="nav-content" >
-                    
-                      <Link
-                      
-                        to={"/profile"}
-                        className="nav-item"
-                      >
-                       
-                       <img src={currentUser.avatar} alt=""   className="w-[3em] h-[3em] icon"/> <span>Profile</span>
+              {
+                <div className="nav">
+                  <div className="nav-content">
+                    <Link to={"/profile"} className="nav-item">
+                      <img
+                        src={currentUser.avatar}
+                        alt=""
+                        className="w-[3em] h-[3em] icon"
+                      />{" "}
+                      <span>Profile</span>
+                    </Link>
+                    {currentUser.role == "admin" && (
+                      <Link to={"/admindashboard"} className="nav-item">
+                        <IconLayoutDashboard className="icon" />
+                        <span>Dashboard</span>
                       </Link>
-                      {currentUser.role == "admin" && (
-                        <Link
-                          to={"/admindashboard"}
-                          className="nav-item"
-                        ><IconLayoutDashboard className='icon'/>
-                          <span>Dashboard</span>
-                          
-                        </Link>
-                      )}
-                      {currentUser.role == "owner" && (
-                        <Link
-                          to={"/ownerdashboard"}
-                          className="nav-item "
-                        >
-                         <IconLayoutDashboard className='icon'/><span >Dashboard</span>
-                          
-                        </Link>
-                      )}
+                    )}
+                    {currentUser.role == "owner" && (
+                      <Link to={"/ownerdashboard"} className="nav-item ">
+                        <IconLayoutDashboard className="icon" />
+                        <span>Dashboard</span>
+                      </Link>
+                    )}
 
-                      <Link  className="nav-item" >
-                      <IconLogout className='icon' onClick={handleLogout}/>
-                        <span onClick={handleLogout} >Logout</span>
-                      </Link>
-                      </div>
+                    <Link className="nav-item">
+                      <IconLogout className="icon" onClick={handleLogout} />
+                      <span onClick={handleLogout}>Logout</span>
+                    </Link>
                   </div>
-                )}
-             
+                </div>
+              }
             </>
           ) : (
             <>
-              <Link to={"/login"} className="mx-7">
-                Login
-              </Link>
-              <Link to={"/register"}>Register</Link>
+              <div>
+                <Link to={"/login"} className="mx-7">
+                  Login
+                </Link>
+                <Link to={"/register"}>Register</Link>
+              </div>
             </>
           )}
         </div>

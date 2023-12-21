@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   updateUserStart,
@@ -8,14 +8,60 @@ import {
   deleteUserStart,
   deleteUserSucess,
 } from "../../slices/userSlice";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { app } from "../../firebase.js";
 
 const ProfilePage = () => {
+  const fileRef = useRef(null);
   const { currentUser } = useSelector((state) => state.user);
-  const [formData, setFormData] = useState();
+  const [formData, setFormData] = useState({});
+  console.log(formData);
+  const [file, setFile] = useState(undefined);
+  const [filePerc, setFilePerc] = useState(0);
+  const [fileUploadError, setFileUploadError] = useState(false);
+  console.log(filePerc);
+  console.log(fileUploadError);
   const dispatch = useDispatch();
+
+  //getting data
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+
+  useEffect(() => {
+    if (file) {
+      handleFileUpload(file);
+    }
+  }, [file]);
+  const handleFileUpload = (file) => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + file.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setFilePerc(Math.round(progress));
+      },
+      (error) => {
+        setFileUploadError(true);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setFormData({ ...formData, avatar: downloadURL });
+        });
+      }
+    );
+  };
+
+  //submit handeler
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -38,6 +84,8 @@ const ProfilePage = () => {
       dispatch(updateUserFaliure(error.message));
     }
   };
+
+  //deleting account
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
@@ -56,15 +104,23 @@ const ProfilePage = () => {
   };
   return (
     <>
-      <div>
-        <img
-          src={currentUser.avatar}
-          alt=""
-          className="w-12 h-11 shadow-xl mt-10 mx-auto"
-        />
-      </div>
       <div className="  flex flex-col justify-between item-center my-7">
         <h1 className="text-lg font-bold mx-auto">User Profile</h1>
+        <div>
+          <input
+            type="file"
+            ref={fileRef}
+            hidden
+            accept="image/*"
+            onChange={(e) => setFile(e.target.files[0])}
+          />
+          <img
+            src={formData.avatar || currentUser.avatar}
+            alt=""
+            className="w-16 h-16 shadow-xl mt-10 mx-auto"
+            onClick={() => fileRef.current.click()}
+          />
+        </div>
         <form onSubmit={handleSubmit} className="flex flex-col mx-auto  ">
           <label htmlFor="email">Username</label>
           <input
