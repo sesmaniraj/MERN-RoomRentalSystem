@@ -6,19 +6,49 @@ import {
 } from "firebase/storage";
 import React, { useState } from "react";
 import { app } from "../../firebase.js";
+import { useSelector } from "react-redux";
 
 const RoomRegister = () => {
+  const { currentUser } = useSelector((state) => state.user);
+  const [imageError, setImageError] = useState(false);
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    address: "",
+    furnished: false,
+    parking: false,
+    available: false,
+    bathrooms: 1,
+    bedrooms: 1,
+    regularPrice: 50,
+    discountedPrice: 50,
     imageUrls: [],
   });
-  const [imageError, setImageError] = useState(false);
+
   console.log(formData);
 
-  // const handleChange = (e) => {
-  //   setFormData({ ...formData, [e.target.id]: e.target.value });
-  //   console.log(formData);
-  // };
+  const handleChange = (e) => {
+    if (
+      e.target.id === "parking" ||
+      e.target.id === "furnished" ||
+      e.target.id === "available"
+    ) {
+      setFormData({
+        ...formData,
+        [e.target.id]: e.target.checked,
+      });
+    } else if (
+      e.target.type === "number" ||
+      e.target.type === "text" ||
+      e.target.type === "textarea"
+    ) {
+      setFormData({
+        ...formData,
+        [e.target.id]: e.target.value,
+      });
+    }
+  };
   const handleSubmitImage = (e) => {
     console.log("hell0");
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -73,8 +103,26 @@ const RoomRegister = () => {
       imageUrls: formData.imageUrls.filter((_, i) => i != index),
     });
   };
-  const submitHandler = async () => {
+  const submitHandler = async (e) => {
     e.preventDefault();
+    try {
+      const res = await fetch("/api/v1/registerroom", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          userRef: currentUser._id,
+        }),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div>
@@ -88,38 +136,56 @@ const RoomRegister = () => {
       >
         <input
           id="name"
-          // onChange={handleChange}
+          onChange={handleChange}
           type="text"
           placeholder="Enter Name"
           className="border-solid border-2 p-1.5 border-sky-500 outline-none rounded-md"
+          value={formData.name}
           required
         />
         <textarea
           id="description"
-          // onChange={handleChange}
-          type="text"
+          onChange={handleChange}
+          type="textarea"
           placeholder="Description"
+          value={formData.description}
           className="border-solid border-2 p-1.5 border-sky-500 outline-none rounded-md"
         />
         <input
           id="address"
-          // onChange={handleChange}
+          onChange={handleChange}
           type="text"
           placeholder="Address"
+          value={formData.address}
           className="border-solid border-2 p-1.5 border-sky-500 outline-none rounded-md"
           required
         />
         <div className="flex gap-5 ">
           <div className="flex gap-2">
-            <input type="checkbox" id="parking" />
+            <input
+              type="checkbox"
+              id="parking"
+              onChange={handleChange}
+              checked={formData.parking}
+            />
             <span>Parking</span>
           </div>
           <div className="flex gap-2">
-            <input type="checkbox" id="available" />
+            <input
+              type="checkbox"
+              id="available"
+              onChange={handleChange}
+              checked={formData.available}
+            />
             <span>Available</span>
           </div>
           <div className="flex gap-2">
-            <input type="checkbox" id="furnished" />
+            <input
+              type="checkbox"
+              id="furnished"
+              onChange={handleChange}
+              checked={formData.furnished}
+            />
             <span>Furnished</span>
           </div>
         </div>
@@ -127,35 +193,43 @@ const RoomRegister = () => {
         <div className="flex flex-col">
           <label htmlFor="">BedRooms</label>
           <input
-            type="Number"
+            type="number"
             id="bedrooms"
             min="1"
             max="10"
             className="p-3 border border-gray-300 rounded-lg"
+            onChange={handleChange}
+            value={formData.bedrooms}
           />
           <label htmlFor="">BathRooms</label>
           <input
-            type="Number"
+            type="number"
             id="bathrooms"
             min="1"
             max="10"
             className="p-3 border border-gray-300 rounded-lg"
+            onChange={handleChange}
+            value={formData.bathrooms}
           />
           <label htmlFor="">RegularPrice(1000 per month)</label>
           <input
-            type="Number"
-            id="regularprice"
-            min="1"
-            max="10"
+            type="number"
+            id="regularPrice"
+            min="5000"
+            max="100000"
             className="p-3 border border-gray-300 rounded-lg"
+            onChange={handleChange}
+            value={formData.regularPrice}
           />
           <label htmlFor="">DiscountedPrice(1000 per month)</label>
           <input
-            type="Number"
-            id="discountprice"
-            min="1"
-            max="10"
+            type="number"
+            id="discountedPrice"
+            min="5000"
+            max="100000"
             className="p-3 border border-gray-300 rounded-lg"
+            onChange={handleChange}
+            value={formData.discountedPrice}
           />
           <label htmlFor="">Images</label>
           <input
