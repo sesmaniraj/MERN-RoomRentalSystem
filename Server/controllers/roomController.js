@@ -21,6 +21,17 @@ export const getUserRoom = async (req, res, next) => {
     return next(errorHandler(401, "Only can see your own room"));
   }
 };
+export const getRoom = async (req, res, next) => {
+  try {
+    const room = await RoomModel.findById(req.params.id);
+    if (!room) {
+      return next(errorHandler(404, "Room not found"));
+    }
+    res.status(200).json(room);
+  } catch (error) {
+    next(error);
+  }
+};
 export const deleteRoom = async (req, res, next) => {
   const room = await RoomModel.findById(req.params.id);
   if (!room) {
