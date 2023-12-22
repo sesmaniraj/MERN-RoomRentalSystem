@@ -36,3 +36,22 @@ export const deleteRoom = async (req, res, next) => {
     next(error);
   }
 };
+export const updateRoom = async (req, res, next) => {
+  const rooms = await RoomModel.findById(req.params.id);
+  if (!rooms) {
+    return next(errorHandler(404, "Room not found"));
+  }
+  if (req.user.id !== rooms.userRef) {
+    return next(errorHandler(401, "you can only update your room"));
+  }
+  try {
+    const updatedRoom = await RoomModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.status(200).json(updatedRoom);
+  } catch (error) {
+    next(error);
+  }
+};
