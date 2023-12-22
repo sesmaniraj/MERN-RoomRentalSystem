@@ -19,13 +19,11 @@ import { app } from "../../firebase.js";
 const ProfilePage = () => {
   const fileRef = useRef(null);
   const { currentUser } = useSelector((state) => state.user);
+  const [room, setRoom] = useState([]);
   const [formData, setFormData] = useState({});
-  console.log(formData);
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
-  console.log(filePerc);
-  console.log(fileUploadError);
   const dispatch = useDispatch();
 
   //getting data
@@ -102,6 +100,20 @@ const ProfilePage = () => {
       dispatch(deleteUserFaliure(error.message));
     }
   };
+
+  //getting room
+  const handleRoom = async () => {
+    try {
+      const res = await fetch(`/api/v1/room/${currentUser._id}`);
+      const data = await res.json();
+      setRoom(data);
+      if (data.success === false) {
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <div className="  flex flex-col justify-between item-center my-7">
@@ -173,6 +185,32 @@ const ProfilePage = () => {
           <span onClick={handleDeleteUser} className="pointer">
             Delete Account
           </span>
+        </div>
+        <div className="mx-auto">
+          <button type="button" onClick={handleRoom} className="pointer">
+            View Room
+          </button>
+        </div>
+
+        <div className="flex flex-col gap-6 justify-evenly w-80  mx-auto my-10">
+          {room &&
+            room.length > 0 &&
+            room.map((list) => (
+              <div className=" w-80 flex justify-between p-5">
+                <div className="flex gap-4">
+                  <img
+                    src={list.imageUrls}
+                    alt=""
+                    className="w-20 rounded-xl"
+                  />
+                  <span>{list.name}</span>
+                </div>
+                <div className=" flex flex-col">
+                  <button className="text-emerald-700">Edit</button>
+                  <button className="text-red-700">Delete</button>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
     </>
