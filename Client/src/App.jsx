@@ -12,6 +12,7 @@ import PrivateRoute from "./components/private/PrivateRoute.jsx";
 import RegisterPage from "./components/pages/RegisterPage.jsx";
 import RoomRegister from "./components/pages/RoomRegister.jsx";
 import UpdateRoom from "./components/pages/UpdateRoom.jsx";
+import RoomDetails from "./components/pages/RoomDetails.jsx";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/room/:id" element={<RoomDetails />} />
 
           <Route element={<PrivateRoute />}>
             <Route path="/profile" element={<ProfilePage />} />

@@ -223,7 +223,11 @@ const ProfilePage = () => {
                     alt=""
                     className="w-20 rounded-xl"
                   />
-                  <span>{list.name}</span>
+                  <Link to={`/room/${list._id}`}>
+                    <span className="underline underline-offset-1">
+                      {list.name}
+                    </span>
+                  </Link>
                 </div>
                 <div className=" flex flex-col">
                   <Link to={`/updateroom/${list._id}`}>
