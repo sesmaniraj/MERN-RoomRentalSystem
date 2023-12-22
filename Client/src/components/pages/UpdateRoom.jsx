@@ -55,6 +55,12 @@ const UpdateRoom = () => {
   useEffect(() => {
     const fetchRoom = async () => {
       const roomId = params.roomId;
+      const res = await fetch(`/api/v1/rooms/${roomId}`);
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(error.message);
+      }
+      setFormData(data);
     };
     fetchRoom();
   }, []);
@@ -116,7 +122,7 @@ const UpdateRoom = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/v1/registerroom", {
+      const res = await fetch(`/api/v1/updateroom/${params.roomId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -225,8 +231,6 @@ const UpdateRoom = () => {
           <input
             type="number"
             id="regularPrice"
-            min="5000"
-            max="100000"
             className="p-3 border border-gray-300 rounded-lg"
             onChange={handleChange}
             value={formData.regularPrice}
@@ -235,8 +239,6 @@ const UpdateRoom = () => {
           <input
             type="number"
             id="discountedPrice"
-            min="5000"
-            max="100000"
             className="p-3 border border-gray-300 rounded-lg"
             onChange={handleChange}
             value={formData.discountedPrice}
@@ -277,7 +279,7 @@ const UpdateRoom = () => {
             ))}
         </div>
         <button type="submit" className="bg-sky-400 rounded-md p-2">
-          Register Room
+          Update
         </button>
       </form>
     </div>
