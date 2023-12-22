@@ -15,6 +15,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../../firebase.js";
+import { Link } from "react-router-dom";
 
 const ProfilePage = () => {
   const fileRef = useRef(null);
@@ -225,7 +226,10 @@ const ProfilePage = () => {
                   <span>{list.name}</span>
                 </div>
                 <div className=" flex flex-col">
-                  <button className="text-emerald-700">Edit</button>
+                  <Link to={`/updateroom/${list._id}`}>
+                    <button className="text-emerald-700">Edit</button>
+                  </Link>
+
                   <button
                     className="text-red-700"
                     onClick={() => handelRoomDelete(list._id)}

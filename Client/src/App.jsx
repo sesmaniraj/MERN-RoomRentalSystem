@@ -11,6 +11,7 @@ import ProfilePage from "./components/pages/ProfilePage.jsx";
 import PrivateRoute from "./components/private/PrivateRoute.jsx";
 import RegisterPage from "./components/pages/RegisterPage.jsx";
 import RoomRegister from "./components/pages/RoomRegister.jsx";
+import UpdateRoom from "./components/pages/UpdateRoom.jsx";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
             <Route path="/admindashboard" element={<AdminDashboard />} />
             <Route path="/ownerdashboard" element={<OwnerDashboard />} />
             <Route path="/registerroom" element={<RoomRegister />} />
+            <Route path="/updateroom/:roomId" element={<UpdateRoom />} />
           </Route>
         </Routes>
       </BrowserRouter>
