@@ -114,6 +114,25 @@ const ProfilePage = () => {
       console.log(error);
     }
   };
+
+  //deleting room
+  const handelRoomDelete = async (roomId) => {
+    try {
+      const res = await fetch(`api/v1/deleteroom/${roomId}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      setRoom((prev) => {
+        prev.filter((rooms) => rooms._id !== roomId);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <div className="  flex flex-col justify-between item-center my-7">
@@ -207,7 +226,12 @@ const ProfilePage = () => {
                 </div>
                 <div className=" flex flex-col">
                   <button className="text-emerald-700">Edit</button>
-                  <button className="text-red-700">Delete</button>
+                  <button
+                    className="text-red-700"
+                    onClick={() => handelRoomDelete(list._id)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}
