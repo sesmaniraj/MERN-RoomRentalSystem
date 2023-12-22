@@ -7,11 +7,15 @@ import {
 import React, { useState } from "react";
 import { app } from "../../firebase.js";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const RoomRegister = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [imageError, setImageError] = useState(false);
   const [files, setFiles] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -50,7 +54,6 @@ const RoomRegister = () => {
     }
   };
   const handleSubmitImage = (e) => {
-    console.log("hell0");
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       const promises = [];
 
@@ -106,6 +109,7 @@ const RoomRegister = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const res = await fetch("/api/v1/registerroom", {
         method: "POST",
         headers: {
@@ -117,8 +121,10 @@ const RoomRegister = () => {
         }),
       });
       const data = await res.json();
+      setLoading(false);
+      navigate("/profile");
       if (data.success === false) {
-        console.log(data.message);
+        setError(data.message);
       }
     } catch (error) {
       console.log(error);
@@ -267,8 +273,9 @@ const RoomRegister = () => {
             ))}
         </div>
         <button type="submit" className="bg-sky-400 rounded-md p-2">
-          Register Room
+          {loading ? "Registering.." : "Register"}
         </button>
+        {error && <span className="text-red-700 mx-auto">{error}</span>}
       </form>
     </div>
   );

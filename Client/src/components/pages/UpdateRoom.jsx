@@ -7,12 +7,15 @@ import {
 import React, { useEffect, useState } from "react";
 import { app } from "../../firebase.js";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const UpdateRoom = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [imageError, setImageError] = useState(false);
   const [files, setFiles] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const params = useParams();
   const [formData, setFormData] = useState({
     name: "",
@@ -122,6 +125,7 @@ const UpdateRoom = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const res = await fetch(`/api/v1/updateroom/${params.roomId}`, {
         method: "POST",
         headers: {
@@ -133,6 +137,8 @@ const UpdateRoom = () => {
         }),
       });
       const data = await res.json();
+      setLoading(false);
+      navigate("/profile");
       if (data.success === false) {
         console.log(data.message);
       }
@@ -279,7 +285,7 @@ const UpdateRoom = () => {
             ))}
         </div>
         <button type="submit" className="bg-sky-400 rounded-md p-2">
-          Update
+          {loading ? "updating" : "Update"}
         </button>
       </form>
     </div>
