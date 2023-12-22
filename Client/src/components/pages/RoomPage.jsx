@@ -18,19 +18,17 @@ const RoomPage = () => {
     }
   };
   return (
-    <div>
+    <div className="flex flex-col justify-between">
       <button onClick={handleRoom}>Click to view room</button>
-      <div className="bg-red-600">
+      <div className="w-2/4 h-64 mx-auto flex flex-col justify-evenly">
         {room.map((item) => (
-          <ul>
-            <li>{item.name}</li>
-            <li>{item.description}</li>
-            <li>{item.address}</li>
-            <img src={item.imageUrls} alt="" />
-            <li>{item.furnished}</li>
-            <li>{item.regularPrice}</li>
-            <li>{item.available}</li>
-          </ul>
+          <div className="flex justify-between ">
+            <img src={item.imageUrls} alt="" className="w-20 rounded-xl" />
+            <div className="flex flex-col items-center">
+              <button className="text-emerald-700">Edit</button>
+              <button className="text-red-700">Delete</button>
+            </div>
+          </div>
         ))}
       </div>
     </div>
