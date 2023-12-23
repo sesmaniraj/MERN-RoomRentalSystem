@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutStart, logoutSucess, logoutFaliure } from "../slices/userSlice";
 import "./Navbar.css";
 import IconLayoutDashboard from "../icons/DashboardIcon";
 import IconLogout from "../icons/LogoutIcon";
-import IconProfile from "../icons/ProfileIcon";
+import { FaSearch } from "react-icons/fa";
 const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -28,6 +29,21 @@ const Navbar = () => {
     }
   };
 
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("searchTerm", searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+  };
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [location.search]);
+
   return (
     <>
       <div className="p-6 max-w-l mx-auto bg-sky-400  shadow-lg flex items-start flex-col">
@@ -35,11 +51,18 @@ const Navbar = () => {
           <Link to={"/"}>
             <h1 className="text-lg font-bold">RoomRentalSystem</h1>
           </Link>
-          <input
-            type="text"
-            placeholder="Search"
-            className="p-2 rounded-xl outline-none"
-          />
+          <form action="" onSubmit={handleSearch}>
+            <input
+              type="text"
+              placeholder="Search"
+              className="p-2 rounded-xl outline-none"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button className="mx-3 bg-slate-700 p-3">
+              <FaSearch />
+            </button>
+          </form>
         </div>
         <div>
           {currentUser ? (
