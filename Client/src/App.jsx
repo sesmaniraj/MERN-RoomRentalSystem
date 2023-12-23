@@ -13,6 +13,7 @@ import RegisterPage from "./components/pages/RegisterPage.jsx";
 import RoomRegister from "./components/pages/RoomRegister.jsx";
 import UpdateRoom from "./components/pages/UpdateRoom.jsx";
 import RoomDetails from "./components/pages/RoomDetails.jsx";
+import Search from "./components/pages/Search.jsx";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/room/:id" element={<RoomDetails />} />
 
           <Route element={<PrivateRoute />}>
