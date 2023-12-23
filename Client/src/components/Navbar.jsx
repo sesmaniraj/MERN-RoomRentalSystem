@@ -31,10 +31,15 @@ const Navbar = () => {
   return (
     <>
       <div className="p-6 max-w-l mx-auto bg-sky-400  shadow-lg flex items-start flex-col">
-        <div>
+        <div className="flex justify-between items-center gap-20">
           <Link to={"/"}>
             <h1 className="text-lg font-bold">RoomRentalSystem</h1>
           </Link>
+          <input
+            type="text"
+            placeholder="Search"
+            className="p-2 rounded-xl outline-none"
+          />
         </div>
         <div>
           {currentUser ? (
