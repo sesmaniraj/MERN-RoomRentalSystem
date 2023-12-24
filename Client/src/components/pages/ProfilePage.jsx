@@ -212,38 +212,34 @@ const ProfilePage = () => {
           </button>
         </div>
 
-        <div className="flex flex-col gap-6 justify-evenly w-80  mx-auto my-10">
-          {room &&
-            room.length > 0 &&
-            room.map((list) => (
-              <div className=" w-80 flex justify-between p-5">
-                <div className="flex gap-4">
-                  <img
-                    src={list.imageUrls}
-                    alt=""
-                    className="w-20 rounded-xl"
-                  />
-                  <Link to={`/room/${list._id}`}>
-                    <span className="underline underline-offset-1">
-                      {list.name}
-                    </span>
-                  </Link>
-                </div>
-                <div className=" flex flex-col">
-                  <Link to={`/updateroom/${list._id}`}>
-                    <button className="text-emerald-700">Edit</button>
-                  </Link>
+        {room &&
+          room.length > 0 &&
+          room.map((list) => (
+            <div className="border rounded-lg p-3 flex justify-between items-center gap-4">
+              <img
+                src={list.imageUrls}
+                alt=""
+                className="h-16 w-16 object-contain"
+              />
+              <Link to={`/room/${list._id}`}>
+                <span className="text-slate-700 font-semibold  hover:underline truncate flex-1">
+                  {list.name}
+                </span>
+              </Link>
+              <div className="flex flex-col item-center">
+                <Link to={`/updateroom/${list._id}`}>
+                  <button className="text-emerald-700">Edit</button>
+                </Link>
 
-                  <button
-                    className="text-red-700"
-                    onClick={() => handelRoomDelete(list._id)}
-                  >
-                    Delete
-                  </button>
-                </div>
+                <button
+                  className="text-red-700"
+                  onClick={() => handelRoomDelete(list._id)}
+                >
+                  Delete
+                </button>
               </div>
-            ))}
-        </div>
+            </div>
+          ))}
       </div>
     </>
   );
