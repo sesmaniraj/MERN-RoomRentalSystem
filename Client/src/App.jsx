@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import { ToastContainer } from "react-toastify";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import HomePage from "./components/pages/HomePage.jsx";
+import Home from "./components/pages/Home.jsx";
 import LoginPage from "./components/pages/LoginPage.jsx";
 import AdminDashboard from "./components/dashboard/AdminDashboard.jsx";
 import OwnerDashboard from "./components/dashboard/OwnerDashboard.jsx";
@@ -22,7 +22,7 @@ const App = () => {
         <Navbar />
         <ToastContainer />
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/search" element={<Search />} />
