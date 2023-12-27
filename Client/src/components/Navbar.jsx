@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutStart, logoutSucess, logoutFaliure } from "../slices/userSlice";
-import "./Navbar.css";
 import IconLayoutDashboard from "../icons/DashboardIcon";
 import IconLogout from "../icons/LogoutIcon";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaSignInAlt, FaUserPlus } from "react-icons/fa";
+
 const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -36,6 +35,7 @@ const Navbar = () => {
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
+
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm");
@@ -46,71 +46,80 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="p-6 max-w-l mx-auto bg-sky-400  shadow-lg flex items-start flex-col">
-        <div className="flex justify-between items-center gap-20">
-          <Link to={"/"}>
-            <h1 className="text-lg font-bold">HamroRoom</h1>
+      <div className="bg-sky-400 p-4 shadow-lg flex items-start justify-between flex-col md:flex-row">
+        <div className="flex justify-between items-center gap-4">
+          <Link to={"/"} className="text-lg font-bold text-black">
+            HamroRoom
           </Link>
           <form
-            action=""
             onSubmit={handleSearch}
-            className="bg-slate-100 p-3 rounded-lg flex items-center"
+            className="flex items-center bg-white p-2 rounded-md mt-2 md:mt-0"
           >
             <input
               type="text"
               placeholder="Search Room here"
-              className="bg-transparent focus:outline-none w-24 sm:w-64"
+              className="bg-transparent focus:outline-none w-24 sm:w-64 border-none"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <button>
+            <button type="submit" className="ml-2">
               <FaSearch />
             </button>
           </form>
         </div>
-        <div>
+        <div className="flex items-center gap-4 mt-4 md:mt-0">
           {currentUser ? (
             <>
-              {
-                <div className="nav">
-                  <div className="nav-content">
-                    <Link to={"/profile"} className="nav-item">
-                      <img
-                        src={currentUser.avatar}
-                        alt=""
-                        className="w-[3em] h-[3em] icon"
-                      />{" "}
-                      <span>Profile</span>
-                    </Link>
-                    {currentUser.role == "admin" && (
-                      <Link to={"/admindashboard"} className="nav-item">
-                        <IconLayoutDashboard className="icon" />
-                        <span>Dashboard</span>
-                      </Link>
-                    )}
-                    {currentUser.role == "owner" && (
-                      <Link to={"/ownerdashboard"} className="nav-item ">
-                        <IconLayoutDashboard className="icon" />
-                        <span>Dashboard</span>
-                      </Link>
-                    )}
-
-                    <Link className="nav-item">
-                      <IconLogout className="icon" onClick={handleLogout} />
-                      <span onClick={handleLogout}>Logout</span>
-                    </Link>
-                  </div>
-                </div>
-              }
+              <Link to={"/profile"} className="flex items-center text-black">
+                <img
+                  src={currentUser.avatar}
+                  alt=""
+                  className="w-8 h-8 rounded-full"
+                />
+                <span className="ml-2">Profile</span>
+              </Link>
+              {currentUser.role === "admin" && (
+                <Link
+                  to={"/admindashboard"}
+                  className="flex items-center text-black"
+                >
+                  <IconLayoutDashboard className="w-6 h-6" />
+                  <span className="ml-2">Dashboard</span>
+                </Link>
+              )}
+              {currentUser.role === "owner" && (
+                <Link
+                  to={"/ownerdashboard"}
+                  className="flex items-center text-black"
+                >
+                  <IconLayoutDashboard className="w-6 h-6" />
+                  <span className="ml-2">Dashboard</span>
+                </Link>
+              )}
+              <button
+                className="flex items-center text-black"
+                onClick={handleLogout}
+              >
+                <IconLogout className="w-6 h-6" />
+                <span className="ml-2">Logout</span>
+              </button>
             </>
           ) : (
             <>
-              <div>
-                <Link to={"/login"} className="mx-7">
-                  Login
-                </Link>
-                <Link to={"/register"}>Register</Link>
-              </div>
+              <Link
+                to={"/login"}
+                className="flex items-center text-black mt-2 md:mt-0"
+              >
+                <FaSignInAlt className="w-6 h-6" />
+                <span className="ml-2">Login</span>
+              </Link>
+              <Link
+                to={"/register"}
+                className="flex items-center text-black mt-2 md:mt-0"
+              >
+                <FaUserPlus className="w-6 h-6" />
+                <span className="ml-2">Register</span>
+              </Link>
             </>
           )}
         </div>

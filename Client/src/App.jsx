@@ -14,7 +14,7 @@ import RoomRegister from "./components/pages/RoomRegister.jsx";
 import UpdateRoom from "./components/pages/UpdateRoom.jsx";
 import RoomDetails from "./components/pages/RoomDetails.jsx";
 import Search from "./components/pages/Search.jsx";
-import Footer from "./components/Footer.jsx";
+// import Footer from "./components/Footer.jsx";
 import About from "./components/pages/About.jsx";
 
 const App = () => {
@@ -39,7 +39,7 @@ const App = () => {
             <Route path="/updateroom/:roomId" element={<UpdateRoom />} />
           </Route>
         </Routes>
-        <Footer />
+        {/* <Footer /> */}
       </BrowserRouter>
     </>
   );
