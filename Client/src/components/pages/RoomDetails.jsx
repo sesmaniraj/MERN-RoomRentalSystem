@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { useSelector } from "react-redux";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import {
   FaBath,
   FaBed,
   FaChair,
-  FaMapMarkedAlt,
   FaMapMarkerAlt,
   FaParking,
   FaShare,
@@ -17,6 +16,7 @@ import {
 
 const RoomDetails = () => {
   SwiperCore.use([Navigation]);
+
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [room, setRoom] = useState(null);
@@ -43,8 +43,9 @@ const RoomDetails = () => {
     };
     fetchRoom();
   }, [params.roomId]);
+
   return (
-    <main>
+    <main className="max-w-4xl mx-auto p-3 my-7">
       {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
       {error && (
         <p className="text-center my-7 text-2xl">Something went wrong!</p>
@@ -55,15 +56,13 @@ const RoomDetails = () => {
             {room.imageUrls.map((url) => (
               <SwiperSlide key={url}>
                 <div
-                  className="h-[550px]"
-                  style={{
-                    background: `url(${url}) center no-repeat`,
-                  }}
+                  className="h-[550px] bg-cover bg-center"
+                  style={{ backgroundImage: `url(${url})` }}
                 ></div>
               </SwiperSlide>
             ))}
           </Swiper>
-          <div className="fixed top-[13%] right-[3%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer">
+          <div className="fixed top-16 right-3 z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer">
             <FaShare
               className="text-slate-500"
               onClick={() => {
@@ -76,21 +75,21 @@ const RoomDetails = () => {
             />
           </div>
           {copied && (
-            <p className="fixed top-[23%] right-[5%] z-10 rounded-md bg-slate-100 p-2">
+            <p className="fixed top-50 right-10 z-10 rounded-md bg-slate-100 p-2">
               Link copied!
             </p>
           )}
-          <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4">
+          <div className="flex flex-col mt-6 gap-4 text-slate-900">
             <p className="text-2xl font-semibold">{room.name}</p>
-            <p className="flex items-center mt-6 gap-2 text-slate-600  text-sm">
+            <p className="flex items-center gap-2 text-sm">
               <FaMapMarkerAlt className="text-green-700" />
               {room.address}
             </p>
-            <p className="text-slate-800">
-              <span className="font-semibold text-black">Description - </span>
+            <p className="font-semibold">
+              <span className="text-black">Description - </span>
               {room.description}
             </p>
-            <ul className="text-slate-900 font-semibold text-sm flex flex-wrap items-center gap-4 sm:gap-6">
+            <ul className="font-semibold text-sm flex flex-wrap gap-4 sm:gap-6">
               <li className="flex items-center gap-1 whitespace-nowrap ">
                 <FaBed className="text-lg" />
                 {room.bedrooms > 1
