@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutStart, logoutSucess, logoutFaliure } from "../slices/userSlice";
-import { FaSearch, FaSignInAlt, FaUserPlus } from "react-icons/fa";
+import {
+  FaSearch,
+  FaSignInAlt,
+  FaUserPlus,
+  FaUser,
+  FaColumns,
+} from "react-icons/fa";
 
 const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -81,7 +87,7 @@ const Navbar = () => {
                   to={"/admindashboard"}
                   className="flex items-center text-black"
                 >
-                  <IconLayoutDashboard className="w-6 h-6" />
+                  <FaColumns className="w-6 h-6" />
                   <span className="ml-2">Dashboard</span>
                 </Link>
               )}
@@ -90,7 +96,7 @@ const Navbar = () => {
                   to={"/ownerdashboard"}
                   className="flex items-center text-black"
                 >
-                  <IconLayoutDashboard className="w-6 h-6" />
+                  <FaColumns className="w-6 h-6" />
                   <span className="ml-2">Dashboard</span>
                 </Link>
               )}
@@ -98,7 +104,7 @@ const Navbar = () => {
                 className="flex items-center text-black"
                 onClick={handleLogout}
               >
-                <IconLogout className="w-6 h-6" />
+                <FaUser />
                 <span className="ml-2">Logout</span>
               </button>
             </>

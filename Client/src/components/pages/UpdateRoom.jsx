@@ -1,10 +1,11 @@
+import React, { useEffect, useState } from "react";
+import { FaBed, FaBath, FaUpload, FaTrash } from "react-icons/fa";
 import {
   getStorage,
   uploadBytesResumable,
   ref,
   getDownloadURL,
 } from "firebase/storage";
-import React, { useEffect, useState } from "react";
 import { app } from "../../firebase.js";
 import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
@@ -31,23 +32,13 @@ const UpdateRoom = () => {
     imageUrls: [],
   });
 
-  console.log(formData);
-
   const handleChange = (e) => {
-    if (
-      e.target.id === "parking" ||
-      e.target.id === "furnished" ||
-      e.target.id === "available"
-    ) {
+    if (["parking", "furnished", "available"].includes(e.target.id)) {
       setFormData({
         ...formData,
         [e.target.id]: e.target.checked,
       });
-    } else if (
-      e.target.type === "number" ||
-      e.target.type === "text" ||
-      e.target.type === "textarea"
-    ) {
+    } else if (["number", "text", "textarea"].includes(e.target.type)) {
       setFormData({
         ...formData,
         [e.target.id]: e.target.value,
@@ -68,14 +59,9 @@ const UpdateRoom = () => {
     fetchRoom();
   }, []);
 
-  const handleSubmitImage = (e) => {
-    console.log("hell0");
+  const handleSubmitImage = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
-      const promises = [];
-
-      for (let i = 0; i < files.length; i++) {
-        promises.push(storeImage(files[i]));
-      }
+      const promises = files.map((file) => storeImage(file));
 
       Promise.all(promises)
         .then((urls) => {
@@ -89,21 +75,23 @@ const UpdateRoom = () => {
           setImageError("Image upload failed (2mb max)");
         });
     } else {
-      setImageError("You can only upload 6");
+      setImageError("You can only upload 6 images");
     }
   };
+
   const storeImage = async (file) => {
     return new Promise((resolve, reject) => {
       const storage = getStorage(app);
       const fileName = new Date().getTime() + file.name;
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
+
       uploadTask.on(
         "state_changed",
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(`upload ${progress} %`);
+          console.log(`Upload progress: ${progress}%`);
         },
         (error) => {
           reject(error);
@@ -116,12 +104,14 @@ const UpdateRoom = () => {
       );
     });
   };
+
   const handleDeleteImage = (index) => {
     setFormData({
       ...formData,
-      imageUrls: formData.imageUrls.filter((_, i) => i != index),
+      imageUrls: formData.imageUrls.filter((_, i) => i !== index),
     });
   };
+
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -146,44 +136,67 @@ const UpdateRoom = () => {
       console.log(error);
     }
   };
+
   return (
     <div>
       <div className="text-center my-10">
-        <h1>Update your room here</h1>
+        <h1 className="text-3xl font-bold">Update your room here</h1>
       </div>
       <form
         action=""
         onSubmit={submitHandler}
-        className="flex gap-2 my-10  flex-col w-6/12 mx-auto"
+        className="flex gap-2 my-10 flex-col w-6/12 mx-auto"
       >
-        <input
-          id="name"
-          onChange={handleChange}
-          type="text"
-          placeholder="Enter Name"
-          className="border-solid border-2 p-1.5 border-sky-500 outline-none rounded-md"
-          value={formData.name}
-          required
-        />
-        <textarea
-          id="description"
-          onChange={handleChange}
-          type="textarea"
-          placeholder="Description"
-          value={formData.description}
-          className="border-solid border-2 p-1.5 border-sky-500 outline-none rounded-md"
-        />
-        <input
-          id="address"
-          onChange={handleChange}
-          type="text"
-          placeholder="Address"
-          value={formData.address}
-          className="border-solid border-2 p-1.5 border-sky-500 outline-none rounded-md"
-          required
-        />
-        <div className="flex gap-5 ">
-          <div className="flex gap-2">
+        {/* Name Input */}
+        <div className="flex items-center mb-4">
+          <label htmlFor="name" className="mr-4">
+            <span>Name</span>
+          </label>
+          <input
+            id="name"
+            onChange={handleChange}
+            type="text"
+            placeholder="Enter Name"
+            className="border-solid border-2 p-1.5 border-sky-500 outline-none rounded-md flex-grow"
+            value={formData.name}
+            required
+          />
+        </div>
+
+        {/* Description Textarea */}
+        <div className="flex items-center mb-4">
+          <label htmlFor="description" className="mr-4">
+            <span>Description</span>
+          </label>
+          <textarea
+            id="description"
+            onChange={handleChange}
+            type="textarea"
+            placeholder="Description"
+            value={formData.description}
+            className="border-solid border-2 p-1.5 border-sky-500 outline-none rounded-md flex-grow"
+          />
+        </div>
+
+        {/* Address Input */}
+        <div className="flex items-center mb-4">
+          <label htmlFor="address" className="mr-4">
+            <span>Address</span>
+          </label>
+          <input
+            id="address"
+            onChange={handleChange}
+            type="text"
+            placeholder="Address"
+            value={formData.address}
+            className="border-solid border-2 p-1.5 border-sky-500 outline-none rounded-md flex-grow"
+            required
+          />
+        </div>
+
+        {/* Checkbox Group */}
+        <div className="flex gap-5 mb-4">
+          <div className="flex items-center gap-2">
             <input
               type="checkbox"
               id="parking"
@@ -192,7 +205,7 @@ const UpdateRoom = () => {
             />
             <span>Parking</span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <input
               type="checkbox"
               id="available"
@@ -201,7 +214,7 @@ const UpdateRoom = () => {
             />
             <span>Available</span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <input
               type="checkbox"
               id="furnished"
@@ -212,80 +225,113 @@ const UpdateRoom = () => {
           </div>
         </div>
 
-        <div className="flex flex-col">
-          <label htmlFor="">BedRooms</label>
-          <input
-            type="number"
-            id="bedrooms"
-            min="1"
-            max="10"
-            className="p-3 border border-gray-300 rounded-lg"
-            onChange={handleChange}
-            value={formData.bedrooms}
-          />
-          <label htmlFor="">BathRooms</label>
-          <input
-            type="number"
-            id="bathrooms"
-            min="1"
-            max="10"
-            className="p-3 border border-gray-300 rounded-lg"
-            onChange={handleChange}
-            value={formData.bathrooms}
-          />
-          <label htmlFor="">RegularPrice(1000 per month)</label>
+        {/* Numeric Inputs */}
+        <div className="flex flex-col mb-4">
+          <div className="flex items-center gap-2">
+            <label htmlFor="bedrooms" className="mr-4">
+              <FaBed />
+              <span>Bedrooms</span>
+            </label>
+            <input
+              type="number"
+              id="bedrooms"
+              min="1"
+              max="10"
+              className="p-3 border border-gray-300 rounded-lg flex-grow"
+              onChange={handleChange}
+              value={formData.bedrooms}
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <label htmlFor="bathrooms" className="mr-4">
+              <FaBath />
+              <span>Bathrooms</span>
+            </label>
+            <input
+              type="number"
+              id="bathrooms"
+              min="1"
+              max="10"
+              className="p-3 border border-gray-300 rounded-lg flex-grow"
+              onChange={handleChange}
+              value={formData.bathrooms}
+            />
+          </div>
+        </div>
+
+        {/* Price Inputs */}
+        <div className="flex flex-col mb-4">
+          <label htmlFor="regularPrice" className="mb-2">
+            Regular Price (1000 per month)
+          </label>
           <input
             type="number"
             id="regularPrice"
-            className="p-3 border border-gray-300 rounded-lg"
+            className="p-3 border border-gray-300 rounded-lg mb-4"
             onChange={handleChange}
             value={formData.regularPrice}
           />
-          <label htmlFor="">DiscountedPrice(1000 per month)</label>
+
+          <label htmlFor="discountedPrice" className="mb-2">
+            Discounted Price (1000 per month)
+          </label>
           <input
             type="number"
             id="discountedPrice"
-            className="p-3 border border-gray-300 rounded-lg"
+            className="p-3 border border-gray-300 rounded-lg mb-4"
             onChange={handleChange}
             value={formData.discountedPrice}
           />
-          <label htmlFor="">Images</label>
-          <input
-            type="file"
-            id="images"
-            accept="image/*"
-            multiple
-            className="p-3 border border-gray-300 rounded-lg"
-            onChange={(e) => setFiles(e.target.files)}
-          />
-          <button
-            type="button"
-            onClick={handleSubmitImage}
-            className="bg-slate-400 rounded-md p-2 m-10"
-          >
-            Upload Image
-          </button>
-          <p className="text-red-700">{imageError && imageError}</p>
+        </div>
+
+        {/* Image Upload Section */}
+        <div className="flex flex-col mb-4">
+          <label htmlFor="images" className="mb-2">
+            Images
+          </label>
+          <div className="flex items-center gap-2">
+            <input
+              type="file"
+              id="images"
+              accept="image/*"
+              multiple
+              className="p-3 border border-gray-300 rounded-lg flex-grow"
+              onChange={(e) => setFiles(e.target.files)}
+            />
+            <button
+              type="button"
+              onClick={handleSubmitImage}
+              className="bg-slate-400 rounded-md p-2"
+            >
+              <FaUpload />
+              <span className="ml-2">Upload Image</span>
+            </button>
+          </div>
+          <p className="text-red-700 mt-2">{imageError && imageError}</p>
           {formData.imageUrls.length > 0 &&
             formData.imageUrls.map((url, index) => (
-              <div key={url} className="flex">
+              <div key={url} className="flex items-center mt-2">
                 <img
                   src={url}
                   alt=""
-                  className="w-30 h-30 object-contain rounded-lg "
+                  className="w-20 h-20 object-contain rounded-lg mr-2"
                 />
                 <button
                   type="button"
-                  className="text-red-700"
+                  className="text-red-700 flex items-center"
                   onClick={() => handleDeleteImage(index)}
                 >
-                  Delete
+                  <FaTrash />
+                  <span className="ml-1">Delete</span>
                 </button>
               </div>
             ))}
         </div>
+
+        {/* Submit button */}
         <button type="submit" className="bg-sky-400 rounded-md p-2">
-          {loading ? "updating" : "Update"}
+          {loading ? "Updating" : "Update"}
         </button>
       </form>
     </div>
