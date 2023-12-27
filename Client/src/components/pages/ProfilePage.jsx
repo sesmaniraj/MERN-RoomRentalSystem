@@ -16,6 +16,7 @@ import {
 } from "firebase/storage";
 import { app } from "../../firebase.js";
 import { Link } from "react-router-dom";
+import { FaUserEdit, FaTrash, FaUserTimes, FaSearch } from "react-icons/fa";
 
 const ProfilePage = () => {
   const fileRef = useRef(null);
@@ -37,11 +38,13 @@ const ProfilePage = () => {
       handleFileUpload(file);
     }
   }, [file]);
+
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
+
     uploadTask.on(
       "state_changed",
       (snapshot) => {
@@ -60,7 +63,7 @@ const ProfilePage = () => {
     );
   };
 
-  //submit handeler
+  //submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -127,16 +130,15 @@ const ProfilePage = () => {
         console.log(data.message);
         return;
       }
-      setRoom((prev) => {
-        prev.filter((rooms) => rooms._id !== roomId);
-      });
+      setRoom((prev) => prev.filter((rooms) => rooms._id !== roomId));
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <>
-      <div className="  flex flex-col justify-between item-center my-7">
+      <div className="flex flex-col justify-between items-center my-7">
         <h1 className="text-lg font-bold mx-auto">User Profile</h1>
         <div>
           <input
@@ -149,16 +151,16 @@ const ProfilePage = () => {
           <img
             src={formData.avatar || currentUser.avatar}
             alt=""
-            className="w-16 h-16 shadow-xl mt-10 mx-auto"
+            className="w-16 h-16 shadow-xl mt-10 mx-auto cursor-pointer"
             onClick={() => fileRef.current.click()}
           />
         </div>
-        <form onSubmit={handleSubmit} className="flex flex-col mx-auto  ">
-          <label htmlFor="email">Username</label>
+        <form onSubmit={handleSubmit} className="flex flex-col mx-auto">
+          <label htmlFor="username">Username</label>
           <input
             type="text"
             id="username"
-            className="border-solid border-2 border-sky-500 outline-none rounded-md"
+            className="border-solid border-2 border-sky-500 outline-none rounded-md px-2 py-1"
             defaultValue={currentUser.username}
             onChange={handleChange}
           />
@@ -166,80 +168,104 @@ const ProfilePage = () => {
           <input
             type="email"
             id="email"
-            className="border-solid border-2 border-sky-500 outline-none rounded-md"
+            className="border-solid border-2 border-sky-500 outline-none rounded-md px-2 py-1"
             defaultValue={currentUser.email}
             onChange={handleChange}
           />
-          <label htmlFor="email">Password</label>
+          <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
-            className="border-solid border-2 border-sky-500 outline-none rounded-md"
+            className="border-solid border-2 border-sky-500 outline-none rounded-md px-2 py-1"
             onChange={handleChange}
           />
-          <label htmlFor="email">Address</label>
+          <label htmlFor="address">Address</label>
           <input
             type="text"
             id="address"
-            className="border-solid border-2 border-sky-500 outline-none rounded-md"
+            className="border-solid border-2 border-sky-500 outline-none rounded-md px-2 py-1"
             defaultValue={currentUser.address}
             onChange={handleChange}
           />
-          <label htmlFor="password">PhoneNumber</label>
-          <input
-            type="text"
-            id="phoneNumber"
-            className="border-solid border-2 border-sky-500 outline-none rounded-md"
-            defaultValue={currentUser.phoneNumber}
-            onChange={handleChange}
-          />
-
+          <label htmlFor="phoneNumber">PhoneNumber</label>
+          <div className="flex items-center border-solid border-2 border-sky-500 outline-none rounded-md px-2 py-1">
+            <span className="text-sky-500 mr-1">+977</span>
+            <input
+              type="text"
+              id="phoneNumber"
+              className="flex-grow outline-none"
+              defaultValue={currentUser.phoneNumber}
+              onChange={handleChange}
+            />
+          </div>
           <button
             type="submit"
-            className="bg-sky-400 my-5 rounded-md disabled:opacity-80"
+            className="bg-sky-400 my-5 rounded-md disabled:opacity-80 px-4 py-2 flex items-center"
           >
+            <FaUserEdit className="inline-block mr-2" />
             Update
           </button>
         </form>
         <div className="mx-auto">
-          <span onClick={handleDeleteUser} className="pointer">
+          <button
+            type="button"
+            onClick={handleDeleteUser}
+            className="pointer text-red-700"
+          >
+            <FaUserTimes className="inline-block mr-2" />
             Delete Account
-          </span>
+          </button>
         </div>
         <div className="mx-auto">
-          <button type="button" onClick={handleRoom} className="pointer">
+          <button
+            type="button"
+            onClick={handleRoom}
+            className="pointer bg-sky-400 px-4 py-2 rounded-md text-white mb-5"
+          >
+            <FaSearch className="inline-block mr-2" />
             View Room
           </button>
         </div>
 
-        {room &&
-          room.length > 0 &&
-          room.map((list) => (
-            <div className="border rounded-lg p-3 flex justify-between items-center gap-4">
-              <img
-                src={list.imageUrls}
-                alt=""
-                className="h-16 w-16 object-contain"
-              />
-              <Link to={`/room/${list._id}`}>
-                <span className="text-slate-700 font-semibold  hover:underline truncate flex-1">
-                  {list.name}
-                </span>
-              </Link>
-              <div className="flex flex-col item-center">
-                <Link to={`/updateroom/${list._id}`}>
-                  <button className="text-emerald-700">Edit</button>
-                </Link>
-
-                <button
-                  className="text-red-700"
-                  onClick={() => handelRoomDelete(list._id)}
-                >
-                  Delete
-                </button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {room &&
+            room.length > 0 &&
+            room.map((list) => (
+              <div
+                key={list._id}
+                className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg"
+              >
+                <img
+                  src={list.imageUrls}
+                  alt=""
+                  className="h-48 w-full object-cover object-center"
+                />
+                <div className="p-4">
+                  <Link to={`/room/${list._id}`}>
+                    <h2 className="text-xl font-semibold text-slate-700 truncate">
+                      {list.name}
+                    </h2>
+                  </Link>
+                  <p className="text-gray-600 truncate">{list.description}</p>
+                  <div className="flex justify-between items-center mt-4">
+                    <Link to={`/updateroom/${list._id}`}>
+                      <button className="text-emerald-700 flex items-center">
+                        <FaUserEdit className="inline-block mr-2" />
+                        Edit
+                      </button>
+                    </Link>
+                    <button
+                      className="text-red-700 flex items-center"
+                      onClick={() => handelRoomDelete(list._id)}
+                    >
+                      <FaTrash className="inline-block mr-2" />
+                      Delete
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+        </div>
       </div>
     </>
   );
