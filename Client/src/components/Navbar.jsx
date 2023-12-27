@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutStart, logoutSucess, logoutFaliure } from "../slices/userSlice";
-import IconLayoutDashboard from "../icons/DashboardIcon";
-import IconLogout from "../icons/LogoutIcon";
 import { FaSearch, FaSignInAlt, FaUserPlus } from "react-icons/fa";
 
 const Navbar = () => {

@@ -1,21 +1,29 @@
-import { React, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import Oauth from "../Oauth";
 import {
   signInFaliure,
   signInStart,
   signInSucess,
 } from "../../slices/userSlice";
-import { useSelector, useDispatch } from "react-redux";
-import Oauth from "../Oauth";
 
 const LoginPage = () => {
-  const [formData, setFormData] = useState();
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -39,47 +47,69 @@ const LoginPage = () => {
       console.log(err);
     }
   };
-  useEffect(() => {});
 
   return (
-    <div className="  flex flex-col justify-between item-center my-7">
-      <h1 className="text-lg font-bold mx-auto">Login Here</h1>
-      <form
-        method="post"
-        onSubmit={submitHandler}
-        className="flex flex-col mx-auto  "
-      >
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          className="border-solid border-2 border-sky-500 outline-none rounded-md"
-          onChange={handleChange}
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          className="border-solid border-2 border-sky-500 outline-none rounded-md"
-          onChange={handleChange}
-        />
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-sky-400 my-5 rounded-md disabled:opacity-80"
-        >
-          {loading ? "Loading.." : "Login"}
-        </button>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 rounded shadow-md w-full md:w-96">
+        <h1 className="text-2xl font-bold mb-4">Login</h1>
+        <form onSubmit={submitHandler}>
+          <div className="mb-4">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-4 relative">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Password
+            </label>
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              className="mt-1 p-2 w-full border border-gray-300 rounded-md pr-10"
+              onChange={handleChange}
+            />
+            <div
+              className="absolute inset-y-0 right-0 top-4 flex items-center pr-2 cursor-pointer"
+              onClick={togglePasswordVisibility}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </div>
+          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-blue-500 text-white py-2 px-4 rounded-md"
+          >
+            {loading ? "Loading..." : "Login"}
+          </button>
+        </form>
+        <div className="mt-4">
+          <p className="text-gray-600">
+            Don't have an account?{" "}
+            <Link to="/register" className="text-blue-500">
+              Register here
+            </Link>
+          </p>
+        </div>
+        {error && (
+          <div className="mt-4 text-red-600">
+            <p>{error}</p>
+          </div>
+        )}
         <Oauth />
-      </form>
-      <div className="flex gap-3 mt-3 mx-auto">
-        <p>Dont have an account ?</p>{" "}
-        <Link to={"/register"}>
-          <span className="text-blue-700">Register</span>
-        </Link>
       </div>
-      <div className="mx-auto text-red-600">{error ? <p>{error}</p> : ""}</div>
     </div>
   );
 };

@@ -1,11 +1,13 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Oauth from "../Oauth";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -14,6 +16,11 @@ const RegisterPage = () => {
       [e.target.id]: e.target.value,
     });
   };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -34,7 +41,6 @@ const RegisterPage = () => {
       setLoading(false);
       setError(null);
       navigate("/login");
-      console.log(data);
     } catch (error) {
       setLoading(false);
       setError(error.message);
@@ -42,74 +48,98 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="  flex flex-col justify-between item-center my-7">
-      <h1 className="text-lg font-bold mx-auto">Register Here</h1>
-      <form
-        method="post"
-        onSubmit={submitHandler}
-        className="flex flex-col mx-auto  "
-      >
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          onChange={handleChange}
-          className="border-solid border-2 border-sky-500 outline-none rounded-md"
-        />
-        <br />
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          onChange={handleChange}
-          className="border-solid border-2 border-sky-500 outline-none rounded-md"
-        />
-        <br />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          onChange={handleChange}
-          className="border-solid border-2 border-sky-500 outline-none rounded-md"
-        />
-        <br />
-        <label htmlFor="phone_number">Phone Number</label>
-        <input
-          type="number"
-          id="phoneNumber"
-          onChange={handleChange}
-          className="border-solid border-2 border-sky-500 outline-none rounded-md"
-        />
-        <br />
-        <label htmlFor="address">Address</label>
-        <input
-          type="text"
-          id="address"
-          onChange={handleChange}
-          className="border-solid border-2 border-sky-500 outline-none rounded-md"
-        />
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 rounded shadow-md w-full md:w-96">
+        <h1 className="text-2xl font-bold mb-4">Register Here</h1>
+        <form onSubmit={submitHandler} className="flex flex-col">
+          <label htmlFor="username" className="mb-2">
+            Username
+          </label>
+          <input
+            type="text"
+            id="username"
+            onChange={handleChange}
+            className="mb-4 p-2 border border-gray-300 rounded-md"
+          />
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-sky-400 my-5 rounded-md disabled:opacity-80"
-        >
-          {loading ? "Loading.." : "Register"}
-        </button>
-        <Oauth />
-      </form>
-      <div className="flex gap-3 mt-3 mx-auto">
-        <p>Already have an account ?</p>{" "}
-        <Link to={"/login"}>
-          <span className="text-blue-700">Login</span>
-        </Link>
-      </div>
-      <div className="mx-auto text-red-600">
-        {error ? (
-          <p className="text-red-500 mt-5">Please fill add credentials.</p>
-        ) : (
-          ""
+          <label htmlFor="email" className="mb-2">
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            onChange={handleChange}
+            className="mb-4 p-2 border border-gray-300 rounded-md"
+          />
+
+          <label htmlFor="password" className="mb-2">
+            Password
+          </label>
+          <div className="relative mb-4">
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              onChange={handleChange}
+              className="p-2 w-full border border-gray-300 rounded-md pr-10"
+            />
+            <div
+              className="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer"
+              onClick={togglePasswordVisibility}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </div>
+          </div>
+
+          <label htmlFor="phoneNumber" className="mb-2">
+            Phone Number
+          </label>
+          <div className="flex items-center mb-4">
+            <span className="mr-2 text-xl"></span>
+            <input
+              type="tel"
+              id="phoneNumber"
+              inputMode="numeric"
+              onChange={handleChange}
+              value="🇳🇵+977"
+              className="p-2 border border-gray-300 rounded-md flex-1"
+            />
+          </div>
+
+          <label htmlFor="address" className="mb-2">
+            Address
+          </label>
+          <input
+            type="text"
+            id="address"
+            onChange={handleChange}
+            className="mb-4 p-2 border border-gray-300 rounded-md"
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-blue-500 text-white py-2 px-4 rounded-md"
+          >
+            {loading ? "Loading..." : "Register"}
+          </button>
+        </form>
+
+        <div className="mt-4">
+          <p className="text-gray-600">
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-500">
+              Login here
+            </Link>
+          </p>
+        </div>
+
+        {error && (
+          <div className="mt-4 text-red-600">
+            <p className="text-red-500 mt-5">{error}</p>
+          </div>
         )}
+
+        <Oauth />
       </div>
     </div>
   );
