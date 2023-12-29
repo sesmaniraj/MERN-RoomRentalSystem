@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import SwiperCore from "swiper";
-import { useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
+import Modal from "react-modal";
 import {
   FaBath,
   FaBed,
@@ -14,6 +14,8 @@ import {
   FaShare,
 } from "react-icons/fa";
 
+Modal.setAppElement("#root"); // Set the root element for accessibility
+
 const RoomDetails = () => {
   SwiperCore.use([Navigation]);
 
@@ -21,7 +23,14 @@ const RoomDetails = () => {
   const [loading, setLoading] = useState(false);
   const [room, setRoom] = useState(null);
   const [copied, setCopied] = useState(false);
-  const { currentUser } = useSelector((state) => state.user);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [bookingStatus, setBookingStatus] = useState("notBooked");
+  const [formData, setFormData] = useState({
+    name: "",
+    address: "",
+    phoneNumber: "",
+  });
+
   const params = useParams();
 
   useEffect(() => {
@@ -44,7 +53,18 @@ const RoomDetails = () => {
     fetchRoom();
   }, [params.id]);
 
-  const isUser = currentUser && currentUser.role === "user";
+  const handleBookNow = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleSubmit = () => {
+    // Perform the booking action here, you may submit the form data to the server
+    // Update the booking status state
+    setBookingStatus("booked");
+
+    // Close the modal
+    setIsModalOpen(false);
+  };
 
   return (
     <main className="max-w-4xl mx-auto p-3 my-7">
@@ -113,12 +133,70 @@ const RoomDetails = () => {
                 {room.furnished ? "Furnished" : "Unfurnished"}
               </li>
             </ul>
-            {isUser && (
-              <button className="bg-blue-500 text-white px-4 py-2 rounded">
+            {bookingStatus === "notBooked" && (
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={handleBookNow}
+              >
                 Book Now
               </button>
             )}
+            {bookingStatus === "booked" && (
+              <p className="text-green-500 font-semibold">Booked!</p>
+            )}
           </div>
+          <Modal
+            isOpen={isModalOpen}
+            onRequestClose={() => setIsModalOpen(false)}
+            className="modal"
+            overlayClassName="overlay"
+          >
+            <h2 className="text-2xl font-semibold mb-4">Book Now</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label htmlFor="name">Name:</label>
+                <input
+                  type="text"
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="address">Address:</label>
+                <input
+                  type="text"
+                  id="address"
+                  value={formData.address}
+                  onChange={(e) =>
+                    setFormData({ ...formData, address: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="phoneNumber">Phone Number:</label>
+                <input
+                  type="tel"
+                  id="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phoneNumber: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Submit
+              </button>
+            </form>
+          </Modal>
         </div>
       )}
     </main>
