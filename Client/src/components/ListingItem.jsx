@@ -42,6 +42,11 @@ const ListingItem = ({ listing }) => {
           </div>
         </div>
       </Link>
+      <div className="p-4 flex justify-end">
+        <Link to={`/room/${listing._id}`} className="text-blue-500">
+          More Details
+        </Link>
+      </div>
     </div>
   );
 };

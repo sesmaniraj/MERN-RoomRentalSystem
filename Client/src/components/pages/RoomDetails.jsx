@@ -42,7 +42,9 @@ const RoomDetails = () => {
       }
     };
     fetchRoom();
-  }, [params.roomId]);
+  }, [params.id]);
+
+  const isUser = currentUser && currentUser.role === "user";
 
   return (
     <main className="max-w-4xl mx-auto p-3 my-7">
@@ -111,6 +113,11 @@ const RoomDetails = () => {
                 {room.furnished ? "Furnished" : "Unfurnished"}
               </li>
             </ul>
+            {isUser && (
+              <button className="bg-blue-500 text-white px-4 py-2 rounded">
+                Book Now
+              </button>
+            )}
           </div>
         </div>
       )}
