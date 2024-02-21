@@ -14,7 +14,7 @@ import {
   FaShare,
 } from "react-icons/fa";
 
-Modal.setAppElement("#root"); // Set the root element for accessibility
+Modal.setAppElement("#root");
 
 const RoomDetails = () => {
   SwiperCore.use([Navigation]);
@@ -152,50 +152,7 @@ const RoomDetails = () => {
             overlayClassName="overlay"
           >
             <h2 className="text-2xl font-semibold mb-4">Book Now</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label htmlFor="name">Name:</label>
-                <input
-                  type="text"
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="address">Address:</label>
-                <input
-                  type="text"
-                  id="address"
-                  value={formData.address}
-                  onChange={(e) =>
-                    setFormData({ ...formData, address: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="phoneNumber">Phone Number:</label>
-                <input
-                  type="tel"
-                  id="phoneNumber"
-                  value={formData.phoneNumber}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phoneNumber: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-              >
-                Submit
-              </button>
-            </form>
+            <BookForm onSubmit={handleBookSubmit} />
           </Modal>
         </div>
       )}
