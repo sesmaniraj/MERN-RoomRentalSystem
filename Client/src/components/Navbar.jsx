@@ -50,9 +50,9 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="bg-sky-400 p-4 shadow-lg flex items-start justify-between flex-col md:flex-row">
+      <div className="bg-gray-800 p-4 shadow-lg flex items-start justify-between flex-col md:flex-row">
         <div className="flex justify-between items-center gap-4">
-          <Link to={"/"} className="text-lg font-bold text-black">
+          <Link to={"/"} className="text-lg font-bold text-white">
             HamroRoom
           </Link>
           <form
@@ -74,7 +74,7 @@ const Navbar = () => {
         <div className="flex items-center gap-4 mt-4 md:mt-0">
           {currentUser ? (
             <>
-              <Link to={"/profile"} className="flex items-center text-black">
+              <Link to={"/profile"} className="flex items-center text-white">
                 <img
                   src={currentUser.avatar}
                   alt=""
@@ -85,7 +85,7 @@ const Navbar = () => {
               {currentUser.role === "admin" && (
                 <Link
                   to={"/admindashboard"}
-                  className="flex items-center text-black"
+                  className="flex items-center text-white"
                 >
                   <FaColumns className="w-6 h-6" />
                   <span className="ml-2">Dashboard</span>
@@ -94,32 +94,32 @@ const Navbar = () => {
               {currentUser.role === "owner" && (
                 <Link
                   to={"/ownerdashboard"}
-                  className="flex items-center text-black"
+                  className="flex items-center text-white "
                 >
                   <FaColumns className="w-6 h-6" />
                   <span className="ml-2">Dashboard</span>
                 </Link>
               )}
               <button
-                className="flex items-center text-black"
+                className="flex items-center text-white"
                 onClick={handleLogout}
               >
                 <FaUser />
-                <span className="ml-2">Logout</span>
+                <span className="ml-2 ">Logout</span>
               </button>
             </>
           ) : (
             <>
               <Link
                 to={"/login"}
-                className="flex items-center text-black mt-2 md:mt-0"
+                className="flex items-center text-white mt-2 md:mt-0"
               >
                 <FaSignInAlt className="w-6 h-6" />
                 <span className="ml-2">Login</span>
               </Link>
               <Link
                 to={"/register"}
-                className="flex items-center text-black mt-2 md:mt-0"
+                className="flex items-center text-white mt-2 md:mt-0"
               >
                 <FaUserPlus className="w-6 h-6" />
                 <span className="ml-2">Register</span>
