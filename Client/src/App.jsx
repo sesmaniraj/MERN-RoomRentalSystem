@@ -29,7 +29,6 @@ const App = () => {
           <Route path="/search" element={<Search />} />
           <Route path="/room/:id" element={<RoomDetails />} />
           <Route path="/about" element={<About />} />
-
           <Route element={<PrivateRoute />}>
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/admindashboard" element={<AdminDashboard />} />
