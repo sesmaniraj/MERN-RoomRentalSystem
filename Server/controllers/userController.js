@@ -72,6 +72,7 @@ export const updateUserProfile = async (req, res, next) => {
           password: req.body.password,
           address: req.body.address,
           phoneNumber: req.body.phoneNumber,
+          priceRange: req.body.priceRange,
           avatar: req.body.avatar,
         },
       },
