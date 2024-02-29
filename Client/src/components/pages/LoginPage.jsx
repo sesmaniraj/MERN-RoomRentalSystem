@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import Oauth from "../Oauth";
 import {
   signInFaliure,
   signInStart,
   signInSucess,
 } from "../../slices/userSlice";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -39,9 +39,11 @@ const LoginPage = () => {
       const data = await res.json();
       if (data.success === false) {
         dispatch(signInFaliure(data.message));
+        toast.error("SomeThing Went Wrong");
         return;
       }
       dispatch(signInSucess(data));
+      toast.success("Login SuccessFully !");
       navigate("/");
     } catch (err) {
       console.log(err);
@@ -49,8 +51,8 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full md:w-96">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 w-full ">
+      <div className="bg-white p-8 rounded shadow-md w-full mx-10">
         <h1 className="text-2xl font-bold mb-4">Login</h1>
         <form onSubmit={submitHandler}>
           <div className="mb-4">
@@ -64,6 +66,7 @@ const LoginPage = () => {
               type="email"
               id="email"
               className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+              placeholder="Enter your email"
               onChange={handleChange}
             />
           </div>
@@ -77,6 +80,7 @@ const LoginPage = () => {
             <input
               type={showPassword ? "text" : "password"}
               id="password"
+              placeholder="Enter your passowrd "
               className="mt-1 p-2 w-full border border-gray-300 rounded-md pr-10"
               onChange={handleChange}
             />
@@ -108,7 +112,6 @@ const LoginPage = () => {
             <p>{error}</p>
           </div>
         )}
-        <Oauth />
       </div>
     </div>
   );
