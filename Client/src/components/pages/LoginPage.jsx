@@ -8,6 +8,7 @@ import {
   signInSucess,
 } from "../../slices/userSlice";
 import { toast } from "react-toastify";
+import Loader from "../utils/Loader";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -49,6 +50,10 @@ const LoginPage = () => {
       console.log(err);
     }
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 w-full ">

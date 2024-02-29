@@ -13,6 +13,7 @@ import {
   FaParking,
   FaShare,
 } from "react-icons/fa";
+import BookingForm from "../BookingForm";
 
 Modal.setAppElement("#root");
 
@@ -57,7 +58,7 @@ const RoomDetails = () => {
     setIsModalOpen(true);
   };
 
-  const handleSubmit = () => {
+  const handleBookSubmit = () => {
     // Perform the booking action here, you may submit the form data to the server
     // Update the booking status state
     setBookingStatus("booked");
@@ -152,7 +153,7 @@ const RoomDetails = () => {
             overlayClassName="overlay"
           >
             <h2 className="text-2xl font-semibold mb-4">Book Now</h2>
-            <BookForm onSubmit={handleBookSubmit} />
+            <BookingForm onSubmit={handleBookSubmit} />
           </Modal>
         </div>
       )}

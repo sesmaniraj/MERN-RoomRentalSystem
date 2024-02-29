@@ -4,7 +4,8 @@ import { Navigation } from "swiper/modules";
 import SwiperCore from "swiper";
 import "swiper/css/bundle";
 import ListingItem from "../ListingItem";
-import { Footer } from "./Footer";
+import Footer from "./Footer";
+import RecommendedRoom from "./RecommendedRoom";
 
 export default function Home() {
   const [offerListings, setOfferListings] = useState([]);
@@ -60,7 +61,7 @@ export default function Home() {
                 Search more here
               </Link>
             </div>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex gap-2 mx-auto">
               {offerListings.map((listing) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
@@ -68,6 +69,7 @@ export default function Home() {
           </div>
         )}
       </div>
+      <RecommendedRoom />
       <Footer />
     </div>
   );
