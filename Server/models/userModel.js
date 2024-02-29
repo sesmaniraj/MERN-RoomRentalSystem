@@ -11,10 +11,16 @@ const userSchema = new mongoose.Schema(
     phoneNumber: {
       type: String,
       default: "9800000000",
+      required: true,
     },
     address: {
       type: String,
       default: "Nepal",
+      required: true,
+    },
+    priceRange: {
+      type: Number,
+      required: true,
     },
     role: {
       type: String,

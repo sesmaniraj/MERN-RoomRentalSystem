@@ -5,7 +5,8 @@ import jwt from "jsonwebtoken";
 
 //for signUp
 export const registerUser = async (req, res, next) => {
-  const { username, email, password, phoneNumber, address, role } = req.body;
+  const { username, email, password, phoneNumber, address, role, priceRange } =
+    req.body;
   const hashedPassword = bcrypt.hashSync(password, 10);
   //now creating the new user
   const newUser = new UserModel({
@@ -14,6 +15,8 @@ export const registerUser = async (req, res, next) => {
     password: hashedPassword,
     phoneNumber,
     address,
+    priceRange,
+    role,
   });
   if (!email) {
     return res.status(400).json({ message: "Input field are required" });
