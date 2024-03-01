@@ -23,13 +23,13 @@ const App = () => {
         <Navbar />
         <ToastContainer />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/room/:id" element={<RoomDetails />} />
-          <Route path="/about" element={<About />} />
           <Route element={<PrivateRoute />}>
+            <Route path="/home" element={<Home />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/room/:id" element={<RoomDetails />} />
+            <Route path="/about" element={<About />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/admindashboard" element={<AdminDashboard />} />
             <Route path="/ownerdashboard" element={<OwnerDashboard />} />

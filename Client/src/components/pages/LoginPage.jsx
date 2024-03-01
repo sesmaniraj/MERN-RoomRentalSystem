@@ -45,7 +45,7 @@ const LoginPage = () => {
       }
       dispatch(signInSucess(data));
       toast.success("Login SuccessFully !");
-      navigate("/");
+      navigate("/home");
     } catch (err) {
       console.log(err);
     }

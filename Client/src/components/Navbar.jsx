@@ -26,7 +26,7 @@ const Navbar = () => {
         return;
       }
       dispatch(logoutSucess(""));
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       dispatch(loginFaliure(error.message));
     }
@@ -52,23 +52,32 @@ const Navbar = () => {
     <>
       <div className="bg-gray-800 p-4 shadow-lg flex items-start justify-between flex-col md:flex-row z-50">
         <div className="flex justify-between items-center gap-4">
-          <Link to={"/"} className="text-lg font-bold text-white">
+          <Link to={"/home"} className="text-lg font-bold text-white">
             HamroRoom
           </Link>
           <form
             onSubmit={handleSearch}
             className="flex items-center bg-white p-2 rounded-md mt-2 md:mt-0"
           >
-            <input
-              type="text"
-              placeholder="Search Room here"
-              className="bg-transparent focus:outline-none w-24 sm:w-64 border-none"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button type="submit" className="ml-2">
-              <FaSearch />
-            </button>
+            {currentUser ? (
+              <>
+                {" "}
+                <input
+                  type="text"
+                  placeholder="Search Room here"
+                  className="bg-transparent focus:outline-none w-24 sm:w-64 border-none"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button type="submit" className="ml-2">
+                  <FaSearch />
+                </button>
+              </>
+            ) : (
+              <>
+                <h1>Welcome to room rental ,Please Login to continue</h1>
+              </>
+            )}
           </form>
         </div>
         <div className="flex items-center gap-4 mt-4 md:mt-0">
@@ -111,7 +120,7 @@ const Navbar = () => {
           ) : (
             <>
               <Link
-                to={"/login"}
+                to={"/"}
                 className="flex items-center text-white mt-2 md:mt-0"
               >
                 <FaSignInAlt className="w-6 h-6" />

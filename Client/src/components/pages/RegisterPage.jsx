@@ -43,7 +43,7 @@ const RegisterPage = () => {
       setLoading(false);
       setError(null);
       toast.success(data.message);
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       setLoading(false);
       setError(error.message);
