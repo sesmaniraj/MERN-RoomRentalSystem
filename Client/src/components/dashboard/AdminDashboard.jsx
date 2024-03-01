@@ -2,25 +2,48 @@ import React, { useState, useEffect } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Modal from "react-modal";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const RoomTable = () => {
   const [rooms, setRooms] = useState([]);
+  const [user, setUser] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [status, setStatus] = useState("");
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     fetchRooms();
+    fetchUsers();
+    fetchBooking();
   }, []);
   const fetchRooms = async () => {
     try {
       const response = await fetch("/api/v1/get");
       const data = await response.json();
-      setRooms(data); // Assuming the response contains an array of rooms
+      setRooms(data);
     } catch (error) {
       console.error("Error fetching rooms:", error);
     }
   };
-
+  const fetchBooking = async () => {
+    try {
+      const response = await fetch("/api/v1/bookings");
+      const data = await response.json();
+      setBookings(data);
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+    }
+  };
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch("/api/v1/getalluser");
+      const data = await response.json();
+      setUser(data);
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+    }
+  };
   const handleDeleteClick = (roomId) => {
     setSelectedRoomId(roomId);
     setIsDeleteModalOpen(true);
@@ -28,7 +51,6 @@ const RoomTable = () => {
 
   const handleConfirmDelete = async () => {
     try {
-      // Call delete API with selectedRoomId
       const response = await fetch(`/api/v1/deleteroom/${selectedRoomId}`, {
         method: "DELETE",
       });
@@ -46,41 +68,113 @@ const RoomTable = () => {
     }
   };
 
+  const handleStatusUpdate = async (id) => {
+    try {
+      await axios.patch(`/api/v1/bookings/${id}`, { status });
+      await fetchBooking();
+
+      toast.success("updated successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="container mx-auto mt-8">
-      <h2 className="text-2xl font-semibold mb-4">Room List</h2>
-      <table className="table-auto w-full">
-        <thead>
-          <tr>
-            <th className="px-4 py-2">Name</th>
-            <th className="px-4 py-2">Description</th>
-            <th className="px-4 py-2">Bedrooms</th>
-            <th className="px-4 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rooms.map((room) => (
-            <tr key={room._id}>
-              <td className="border px-4 py-2">{room.name}</td>
-              <td className="border px-4 py-2">{room.description}</td>
-              <td className="border px-4 py-2">{room.bedrooms}</td>
-              <td className="border px-4 py-2">
-                <button
-                  className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2 hover:bg-blue-600"
-                  onClick={() => handleDeleteClick(room._id)}
-                >
-                  <FaTrash />
-                </button>
-                <button className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600">
-                  <FaEdit />
-                </button>
-              </td>
+      <div>
+        <h2 className="text-2xl font-semibold mb-4">Room List</h2>
+        <table className="table-auto w-full">
+          <thead>
+            <tr className="bg-blue-500">
+              <th className="px-4 py-2">Name</th>
+              <th className="px-4 py-2">Description</th>
+              <th className="px-4 py-2">Bedrooms</th>
+              <th className="px-4 py-2">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rooms.map((room) => (
+              <tr key={room._id}>
+                <td className="border px-4 py-2">{room.name}</td>
+                <td className="border px-4 py-2">{room.description}</td>
+                <td className="border px-4 py-2">{room.bedrooms}</td>
+                <td className="border px-4 py-2">
+                  <button
+                    className="bg-red-500 text-white px-2 py-1 rounded-md mr-2 hover:bg-red-600"
+                    onClick={() => handleDeleteClick(room._id)}
+                  >
+                    <FaTrash />
+                  </button>
+                  <button className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600">
+                    <FaEdit />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="mt-20">
+        <h2 className="text-2xl font-semibold mb-4">User list</h2>
+        <table className="table-auto w-full">
+          <thead>
+            <tr className="bg-blue-500">
+              <th className="px-4 py-2">UserName</th>
+              <th className="px-4 py-2">Email</th>
+              <th className="px-4 py-2">PhoneNumber</th>
+              <th className="px-4 py-2">Address</th>
+              <th className="px-4 py-2">Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            {user.map((user) => (
+              <tr key={user._id}>
+                <td className="border px-4 py-2">{user.username}</td>
+                <td className="border px-4 py-2">{user.email}</td>
+                <td className="border px-4 py-2">{user.phoneNumber}</td>
+                <td className="border px-4 py-2">{user.address}</td>
+                <td className="border px-4 py-2">{user.role}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      {/* Delete Modal */}
+      <div className="mt-20">
+        <h2 className="text-2xl font-semibold mb-4">Booking list</h2>
+        <table className="table-auto w-full">
+          <thead>
+            <tr className="bg-blue-500">
+              <th className="px-4 py-2">Name</th>
+              <th className="px-4 py-2">Address</th>
+              <th className="px-4 py-2">PhoneNumber</th>
+              <th className="px-4 py-2">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bookings.map((booking) => (
+              <tr key={booking._id}>
+                <td className="border px-4 py-2">{booking.name}</td>
+                <td className="border px-4 py-2">{booking.address}</td>
+                <td className="border px-4 py-2">{booking.phoneNumber}</td>
+                <td className="border px-4 py-2">
+                  <select
+                    name="status"
+                    value={booking.status}
+                    onChange={(e) => setStatus(e.target.value)}
+                    onClick={() => handleStatusUpdate(booking._id)}
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="accept">Accept</option>
+                    <option value="declined">Decline</option>
+                  </select>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
       <Modal
         isOpen={isDeleteModalOpen}
         onRequestClose={() => setIsDeleteModalOpen(false)}
