@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import Modal from "react-modal";
+import { toast } from "react-toastify";
 import {
   FaBath,
   FaBed,
@@ -13,7 +14,6 @@ import {
   FaParking,
   FaShare,
 } from "react-icons/fa";
-import BookingForm from "../BookingForm";
 
 Modal.setAppElement("#root");
 
@@ -26,14 +26,13 @@ const RoomDetails = () => {
   const [copied, setCopied] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookingStatus, setBookingStatus] = useState("notBooked");
-  const [formData, setFormData] = useState({
+
+  const params = useParams();
+  const [bookingformData, setBookingFormData] = useState({
     name: "",
     address: "",
     phoneNumber: "",
   });
-
-  const params = useParams();
-
   useEffect(() => {
     const fetchRoom = async () => {
       try {
@@ -58,23 +57,42 @@ const RoomDetails = () => {
     setIsModalOpen(true);
   };
 
-  const handleBookSubmit = () => {
-    // Perform the booking action here, you may submit the form data to the server
-    // Update the booking status state
-    setBookingStatus("booked");
-
-    // Close the modal
-    setIsModalOpen(false);
+  const handleChange = (e) => {
+    setBookingFormData({ ...bookingformData, [e.target.name]: e.target.value });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetch("/api/v1/bookings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: bookingformData.name,
+        address: bookingformData.address,
+        phoneNumber: bookingformData.phoneNumber,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        toast.success("Booking successful:", data);
+        setIsModalOpen(false);
+        setBookingStatus("booked");
+      })
+
+      .catch((error) => {
+        console.error("Error booking room:", error);
+      });
+  };
   return (
-    <main className="max-w-4xl mx-auto p-3 my-7">
+    <main className="max-w-4xl mx-auto p-3 my-7 ">
       {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
       {error && (
         <p className="text-center my-7 text-2xl">Something went wrong!</p>
       )}
       {room && !loading && !error && (
-        <div>
+        <div className="z-0">
           <Swiper navigation>
             {room.imageUrls.map((url) => (
               <SwiperSlide key={url}>
@@ -149,11 +167,63 @@ const RoomDetails = () => {
           <Modal
             isOpen={isModalOpen}
             onRequestClose={() => setIsModalOpen(false)}
-            className="modal"
-            overlayClassName="overlay"
+            className="modal fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 rounded shadow-lg z-50"
+            overlayClassName="overlay fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 z-40"
           >
             <h2 className="text-2xl font-semibold mb-4">Book Now</h2>
-            <BookingForm onSubmit={handleBookSubmit} />
+            <div>
+              <h2>Book Room: {room.name}</h2>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label htmlFor="name" className="block font-semibold">
+                    Name:
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    onChange={handleChange}
+                    required
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="address" className="block font-semibold">
+                    Address:
+                  </label>
+                  <input
+                    type="text"
+                    id="address"
+                    name="address"
+                    onChange={handleChange}
+                    required
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="phoneNumber" className="block font-semibold">
+                    Phone Number:
+                  </label>
+                  <input
+                    type="number"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    onChange={handleChange}
+                    required
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                  Book Now
+                </button>
+              </form>
+            </div>
           </Modal>
         </div>
       )}
