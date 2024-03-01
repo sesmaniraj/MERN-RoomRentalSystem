@@ -6,6 +6,7 @@ import {
   updateUserProfile,
   google,
   deleteUserProfile,
+  getAllUser,
 } from "../controllers/userController.js";
 import { verifyToken } from "../utils/verifyUser.js";
 const router = express.Router();
@@ -15,6 +16,7 @@ const router = express.Router();
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/google", google);
+router.get("/getalluser", verifyToken, getAllUser);
 router.get("/logout", logoutUser);
 router.post("/update/:id", verifyToken, updateUserProfile);
 router.delete("/delete/:id", verifyToken, deleteUserProfile);

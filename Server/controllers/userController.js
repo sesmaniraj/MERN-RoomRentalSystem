@@ -128,3 +128,12 @@ export const deleteUserProfile = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getAllUser = async (req, res, next) => {
+  try {
+    const user = await UserModel.find();
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
