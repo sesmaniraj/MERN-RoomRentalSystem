@@ -26,7 +26,7 @@ const ListingItem = ({ listing }) => {
             {listing.description}
           </p>
           <p className="text-slate-500 font-semibold ">
-            $
+            Rs
             {listing.offer
               ? listing.discountPrice.toLocaleString("en-US")
               : listing.regularPrice.toLocaleString("en-US")}
