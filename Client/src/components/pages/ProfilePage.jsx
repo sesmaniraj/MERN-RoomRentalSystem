@@ -136,6 +136,12 @@ const ProfilePage = () => {
     }
   };
 
+  const fetchBooking = async () => {
+    try {
+      const res = await axios.get("/");
+    } catch (error) {}
+  };
+
   return (
     <>
       <div className="flex flex-col justify-between items-center my-7">
