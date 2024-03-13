@@ -53,33 +53,31 @@ const RoomRegister = () => {
     }
   };
 
-  const handleSubmitImage = async () => {
-    setLoading(true); // Set loading to true when starting the upload process
+  const handleSubmitImage = (e) => {
+    if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
+      const promises = [];
 
-    try {
-      if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
-        const promises = files.map((file) => storeImage(file));
-
-        const urls = await Promise.all(promises);
-
-        setFormData({
-          ...formData,
-          imageUrls: formData.imageUrls.concat(urls),
-        });
-
-        setImageError(false);
-      } else {
-        setImageError("You can only upload 6 images");
+      for (let i = 0; i < files.length; i++) {
+        promises.push(storeImage(files[i]));
       }
-    } catch (err) {
-      setImageError("Image upload failed (2mb max)");
-    } finally {
-      setLoading(false); // Set loading to false when upload is complete or fails
+
+      Promise.all(promises)
+        .then((urls) => {
+          setFormData({
+            ...formData,
+            imageUrls: formData.imageUrls.concat(urls),
+          });
+          setImageError(false);
+        })
+        .catch((err) => {
+          setImageError("Image upload failed (2mb max)");
+        });
+    } else {
+      setImageError("You can only upload 6 images");
     }
   };
 
   const storeImage = async (file) => {
-    setLoading(true);
     return new Promise((resolve, reject) => {
       const storage = getStorage(app);
       const fileName = new Date().getTime() + file.name;
@@ -127,7 +125,7 @@ const RoomRegister = () => {
       });
       const data = await res.json();
       setLoading(false);
-      navigate("/home");
+      navigate("/profile");
       if (data.success === false) {
         setError(data.message);
       }
@@ -137,14 +135,14 @@ const RoomRegister = () => {
   };
 
   return (
-    <div className="container mx-auto my-10 w-full">
+    <div className="container mx-auto my-10">
       <div className="text-center my-10">
         <h1 className="text-3xl font-bold">Register your room here</h1>
       </div>
       <form
         action=""
         onSubmit={submitHandler}
-        className="flex gap-2 my-10 flex-col w-full mx-auto"
+        className="flex gap-2 my-10 flex-col w-full  mx-auto"
       >
         <input
           id="name"
@@ -237,7 +235,7 @@ const RoomRegister = () => {
           <input
             type="number"
             id="discountedPrice"
-            min="1000"
+            min="5000"
             max="100000"
             className="p-3 border border-gray-300 rounded-lg"
             onChange={handleChange}
@@ -257,7 +255,7 @@ const RoomRegister = () => {
             onClick={handleSubmitImage}
             className="bg-slate-400 rounded-md p-2 mt-4"
           >
-            {loading ? "Uploading" : "Upload"}
+            Upload Image
           </button>
           <p className="text-red-700">{imageError && imageError}</p>
           {formData.imageUrls.length > 0 &&
