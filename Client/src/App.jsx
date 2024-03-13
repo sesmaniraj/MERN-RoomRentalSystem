@@ -26,7 +26,10 @@ const App = () => {
       {!hideNavbar && <Navbar />}
       <ToastContainer />
       <Routes>
-        <Route path="/" element={currentUser._id ? <Home /> : <LoginPage />} />
+        <Route
+          path="/"
+          element={currentUser && currentUser._id ? <Home /> : <LoginPage />}
+        />
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<PrivateRoute />}>
           <Route path="/home" element={<Home />} />
