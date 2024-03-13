@@ -151,11 +151,11 @@ const UpdateRoom = () => {
       <form
         action=""
         onSubmit={submitHandler}
-        className="flex gap-2 my-10 flex-col w-full px-10"
+        className="flex gap-2 my-3 flex-col w-full px-10"
       >
         {/* Name Input */}
-        <div className="flex items-center mb-4">
-          <label htmlFor="name" className="mr-4">
+        <div className="flex  flex-col  mb-4 ">
+          <label htmlFor="name" className="mr-4 text-start">
             <span>Name</span>
           </label>
           <input
@@ -163,14 +163,14 @@ const UpdateRoom = () => {
             onChange={handleChange}
             type="text"
             placeholder="Enter Name"
-            className="border-solid border-2 p-1.5 border-sky-500 outline-none rounded-md flex-grow"
+            className="border-solid border-2 p-1.5  outline-none rounded-md flex-grow w-full"
             value={formData.name}
             required
           />
         </div>
 
         {/* Description Textarea */}
-        <div className="flex items-center mb-4">
+        <div className="flex  flex-col  mb-4">
           <label htmlFor="description" className="mr-4">
             <span>Description</span>
           </label>
@@ -180,12 +180,12 @@ const UpdateRoom = () => {
             type="textarea"
             placeholder="Description"
             value={formData.description}
-            className="border-solid border-2 p-1.5 border-sky-500 outline-none rounded-md flex-grow"
+            className="border-solid border-2 p-1.5  outline-none rounded-md flex-grow w-full"
           />
         </div>
 
         {/* Address Input */}
-        <div className="flex items-center mb-4">
+        <div className="flex flex-col mb-4">
           <label htmlFor="address" className="mr-4">
             <span>Address</span>
           </label>
@@ -195,13 +195,13 @@ const UpdateRoom = () => {
             type="text"
             placeholder="Address"
             value={formData.address}
-            className="border-solid border-2 p-1.5 border-sky-500 outline-none rounded-md flex-grow"
+            className="border-solid border-2 p-1.5  outline-none rounded-md flex-grow"
             required
           />
         </div>
 
         {/* Checkbox Group */}
-        <div className="flex gap-5 mb-4">
+        <div className="flex flex-col gap-5 mb-4">
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -233,8 +233,11 @@ const UpdateRoom = () => {
 
         {/* Numeric Inputs */}
         <div className="flex flex-col mb-4">
-          <div className="flex items-center gap-2">
-            <label htmlFor="bedrooms" className="mr-4">
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="bedrooms"
+              className="mr-4 flex gap-2 items-center mt-3"
+            >
               <FaBed />
               <span>Bedrooms</span>
             </label>
@@ -249,8 +252,11 @@ const UpdateRoom = () => {
             />
           </div>
 
-          <div className="flex items-center gap-2">
-            <label htmlFor="bathrooms" className="mr-4">
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="bathrooms"
+              className="mr-4 flex gap-2 items-center mt-3"
+            >
               <FaBath />
               <span>Bathrooms</span>
             </label>
@@ -308,10 +314,13 @@ const UpdateRoom = () => {
             <button
               type="button"
               onClick={handleSubmitImage}
-              className="bg-slate-400 rounded-md p-2"
+              className="bg-sky-400 rounded-md p-2"
             >
-              <FaUpload />
-              <span className="ml-2">Upload Image</span>
+              <span className="ml-2 flex items-center gap-2">
+                {" "}
+                <FaUpload />
+                Upload Image
+              </span>
             </button>
           </div>
           <p className="text-red-700 mt-2">{imageError && imageError}</p>
@@ -321,7 +330,7 @@ const UpdateRoom = () => {
                 <img
                   src={url}
                   alt=""
-                  className="w-20 h-20 object-contain rounded-lg mr-2"
+                  className="w-40 h-40 object-contain rounded-lg mr-2"
                 />
                 <button
                   type="button"
@@ -329,7 +338,6 @@ const UpdateRoom = () => {
                   onClick={() => handleDeleteImage(index)}
                 >
                   <FaTrash />
-                  <span className="ml-1">Delete</span>
                 </button>
               </div>
             ))}
