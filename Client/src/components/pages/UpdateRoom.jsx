@@ -9,6 +9,7 @@ import {
 import { app } from "../../firebase.js";
 import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const UpdateRoom = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -128,7 +129,8 @@ const UpdateRoom = () => {
       });
       const data = await res.json();
       setLoading(false);
-      navigate("/profile");
+      navigate("/home");
+      toast.success("Room Updated SuccessFully 1");
       if (data.success === false) {
         console.log(data.message);
       }
@@ -139,13 +141,17 @@ const UpdateRoom = () => {
 
   return (
     <div>
-      <div className="text-center my-10">
-        <h1 className="text-3xl font-bold">Update your room here</h1>
+      <div className="text-center  w-full">
+        <div className="bg-gray-800 text-white p-4 flex justify-between">
+          <span>Room Rental System</span>
+          <span>Welcome Admin</span>
+        </div>
+        <h1 className="text-3xl font-bold mt-5">Update your room here</h1>
       </div>
       <form
         action=""
         onSubmit={submitHandler}
-        className="flex gap-2 my-10 flex-col w-6/12 mx-auto"
+        className="flex gap-2 my-10 flex-col w-full px-10"
       >
         {/* Name Input */}
         <div className="flex items-center mb-4">
