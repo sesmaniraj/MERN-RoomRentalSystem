@@ -20,12 +20,13 @@ import { useSelector } from "react-redux";
 const App = () => {
   const location = useLocation();
   const { currentUser } = useSelector((state) => state.user);
-  const hideNavbar = location.pathname === "/admindashboard";
-  const hideOwnerNavbar = location.pathname === "/owner";
-  const hideUpdateNavbar = location.pathname.startsWith("/updateroom");
+  const hideNavbar =
+    location.pathname === "/admindashboard" ||
+    location.pathname === "/ownerdashboard" ||
+    location.pathname.startsWith("/updateroom");
   return (
     <>
-      {!hideNavbar && !hideUpdateNavbar && hideOwnerNavbar && <Navbar />}
+      {!hideNavbar && <Navbar />}
       <ToastContainer />
       <Routes>
         <Route

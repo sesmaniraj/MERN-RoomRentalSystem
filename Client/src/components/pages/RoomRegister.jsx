@@ -8,7 +8,7 @@ import {
 import React, { useState } from "react";
 import { app } from "../../firebase.js";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const RoomRegister = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -135,8 +135,8 @@ const RoomRegister = () => {
   };
 
   return (
-    <div className="container mx-auto my-10">
-      <div className="text-center my-10">
+    <div className="">
+      <div className="text-center ">
         <h1 className="text-3xl font-bold">Register your room here</h1>
       </div>
       <form
