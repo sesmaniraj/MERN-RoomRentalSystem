@@ -17,10 +17,10 @@ const OwnerDashboard = () => {
     <div className="flex flex-col h-screen">
       {/* Top bar */}
       <div className="bg-gray-800 text-white p-4 flex justify-between">
-        <span>Owner Dashboard</span>
         <Link to={"/home"}>
           <span>Room Rental System</span>
         </Link>
+        <span>Welcome Owner</span>
       </div>
 
       {/* Sidebar and main content */}
