@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "./components/Navbar";
 import { ToastContainer } from "react-toastify";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./components/pages/Home.jsx";
 import LoginPage from "./components/pages/LoginPage.jsx";
@@ -15,29 +15,31 @@ import UpdateRoom from "./components/pages/UpdateRoom.jsx";
 import RoomDetails from "./components/pages/RoomDetails.jsx";
 import Search from "./components/pages/Search.jsx";
 import About from "./components/pages/About.jsx";
+import { useSelector } from "react-redux";
 
 const App = () => {
+  const location = useLocation();
+  const { currentUser } = useSelector((state) => state.user);
+  const hideNavbar = location.pathname === "/admindashboard";
   return (
     <>
-      <BrowserRouter>
-        <Navbar />
-        <ToastContainer />
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route element={<PrivateRoute />}>
-            <Route path="/home" element={<Home />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/room/:id" element={<RoomDetails />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/admindashboard" element={<AdminDashboard />} />
-            <Route path="/ownerdashboard" element={<OwnerDashboard />} />
-            <Route path="/registerroom" element={<RoomRegister />} />
-            <Route path="/updateroom/:roomId" element={<UpdateRoom />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      {!hideNavbar && <Navbar />}
+      <ToastContainer />
+      <Routes>
+        <Route path="/" element={currentUser._id ? <Home /> : <LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/home" element={<Home />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/room/:id" element={<RoomDetails />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/admindashboard" element={<AdminDashboard />} />
+          <Route path="/ownerdashboard" element={<OwnerDashboard />} />
+          <Route path="/registerroom" element={<RoomRegister />} />
+          <Route path="/updateroom/:roomId" element={<UpdateRoom />} />
+        </Route>
+      </Routes>
     </>
   );
 };
