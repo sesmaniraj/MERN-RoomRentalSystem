@@ -135,14 +135,14 @@ const RoomRegister = () => {
   };
 
   return (
-    <div className="container mx-auto my-10">
+    <div className="container mx-auto my-10 w-full">
       <div className="text-center my-10">
         <h1 className="text-3xl font-bold">Register your room here</h1>
       </div>
       <form
         action=""
         onSubmit={submitHandler}
-        className="flex gap-2 my-10 flex-col w-full md:w-6/12 mx-auto"
+        className="flex gap-2 my-10 flex-col w-full mx-auto"
       >
         <input
           id="name"
@@ -235,7 +235,7 @@ const RoomRegister = () => {
           <input
             type="number"
             id="discountedPrice"
-            min="5000"
+            min="1000"
             max="100000"
             className="p-3 border border-gray-300 rounded-lg"
             onChange={handleChange}
