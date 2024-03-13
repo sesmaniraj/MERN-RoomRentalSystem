@@ -16,7 +16,13 @@ import {
 } from "firebase/storage";
 import { app } from "../../firebase.js";
 import { Link } from "react-router-dom";
-import { FaUserEdit, FaTrash, FaUserTimes, FaSearch } from "react-icons/fa";
+import {
+  FaUserEdit,
+  FaTrash,
+  FaUserTimes,
+  FaSearch,
+  FaEdit,
+} from "react-icons/fa";
 
 const ProfilePage = () => {
   const fileRef = useRef(null);
@@ -136,17 +142,10 @@ const ProfilePage = () => {
     }
   };
 
-  const fetchBooking = async () => {
-    try {
-      const res = await axios.get("/");
-    } catch (error) {}
-  };
-
   return (
     <>
-      <div className="flex flex-col justify-between items-center my-7">
-        <h1 className="text-lg font-bold mx-auto">User Profile</h1>
-        <div>
+      <div className="flex flex-col justify-between items-center my-7 w-full px-10">
+        <div className="flex flex-col items-center gap-2">
           <input
             type="file"
             ref={fileRef}
@@ -157,16 +156,21 @@ const ProfilePage = () => {
           <img
             src={formData.avatar || currentUser.avatar}
             alt=""
-            className="w-16 h-16 shadow-xl mt-10 mx-auto cursor-pointer"
-            onClick={() => fileRef.current.click()}
+            className="h-32 w-32 shadow-xl mt-10 mx-auto cursor-pointer object-cover rounded-xl"
           />
+          <span
+            onClick={() => fileRef.current.click()}
+            className="cursor-pointer"
+          >
+            <FaEdit size={24} />
+          </span>
         </div>
-        <form onSubmit={handleSubmit} className="flex flex-col mx-auto">
+        <form onSubmit={handleSubmit} className="flex flex-col w-full mx-20">
           <label htmlFor="username">Username</label>
           <input
             type="text"
             id="username"
-            className="border-solid border-2 border-sky-500 outline-none rounded-md px-2 py-1"
+            className="border-solid border-2 outline-none rounded-md px-2 py-1 h-12 text-xl"
             defaultValue={currentUser.username}
             onChange={handleChange}
           />
@@ -174,7 +178,7 @@ const ProfilePage = () => {
           <input
             type="email"
             id="email"
-            className="border-solid border-2 border-sky-500 outline-none rounded-md px-2 py-1"
+            className="border-solid border-2 outline-none rounded-md px-2 py-1 h-12 text-xl"
             defaultValue={currentUser.email}
             onChange={handleChange}
           />
@@ -182,19 +186,19 @@ const ProfilePage = () => {
           <input
             type="password"
             id="password"
-            className="border-solid border-2 border-sky-500 outline-none rounded-md px-2 py-1"
+            className="border-solid border-2 outline-none rounded-md px-2 py-1 h-12 text-xl"
             onChange={handleChange}
           />
           <label htmlFor="address">Address</label>
           <input
             type="text"
             id="address"
-            className="border-solid border-2 border-sky-500 outline-none rounded-md px-2 py-1"
+            className="border-solid border-2 outline-none rounded-md px-2 py-1 h-12 text-xl"
             defaultValue={currentUser.address}
             onChange={handleChange}
           />
           <label htmlFor="phoneNumber">PhoneNumber</label>
-          <div className="flex items-center border-solid border-2 border-sky-500 outline-none rounded-md px-2 py-1">
+          <div className="flex items-center border-solid border-2 outline-none rounded-md px-2 py-1 h-12 text-xl">
             <span className="text-sky-500 mr-1">+977</span>
             <input
               type="text"
@@ -206,9 +210,9 @@ const ProfilePage = () => {
           </div>
           <button
             type="submit"
-            className="bg-sky-400 my-5 rounded-md disabled:opacity-80 px-4 py-2 flex items-center"
+            className="my-5 rounded-md disabled:opacity-80 px-4 py-2 flex items-center justify-center bg-sky-400 text-white"
           >
-            <FaUserEdit className="inline-block mr-2" />
+            <FaUserEdit className="inline-block mr-2 text-2xl " color="white" />
             Update
           </button>
         </form>
@@ -216,20 +220,10 @@ const ProfilePage = () => {
           <button
             type="button"
             onClick={handleDeleteUser}
-            className="pointer text-red-700"
+            className="pointer bg-red-600 p-1 rounded-xl text-white"
           >
-            <FaUserTimes className="inline-block mr-2" />
+            <FaUserTimes className="inline-block mr-2" color="white" />
             Delete Account
-          </button>
-        </div>
-        <div className="mx-auto">
-          <button
-            type="button"
-            onClick={handleRoom}
-            className="pointer bg-sky-400 px-4 py-2 rounded-md text-white mb-5"
-          >
-            <FaSearch className="inline-block mr-2" />
-            View Room
           </button>
         </div>
 
