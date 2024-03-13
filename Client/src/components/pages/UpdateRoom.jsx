@@ -8,7 +8,7 @@ import {
 } from "firebase/storage";
 import { app } from "../../firebase.js";
 import { useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const UpdateRoom = () => {
@@ -143,7 +143,10 @@ const UpdateRoom = () => {
     <div>
       <div className="text-center  w-full">
         <div className="bg-gray-800 text-white p-4 flex justify-between">
-          <span>Room Rental System</span>
+          <Link to={"/home"}>
+            <span>Room Rental System</span>
+          </Link>
+
           <span>Welcome Admin</span>
         </div>
         <h1 className="text-3xl font-bold mt-5">Update your room here</h1>
