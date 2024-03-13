@@ -53,31 +53,33 @@ const RoomRegister = () => {
     }
   };
 
-  const handleSubmitImage = (e) => {
-    if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
-      const promises = [];
+  const handleSubmitImage = async () => {
+    setLoading(true); // Set loading to true when starting the upload process
 
-      for (let i = 0; i < files.length; i++) {
-        promises.push(storeImage(files[i]));
-      }
+    try {
+      if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
+        const promises = files.map((file) => storeImage(file));
 
-      Promise.all(promises)
-        .then((urls) => {
-          setFormData({
-            ...formData,
-            imageUrls: formData.imageUrls.concat(urls),
-          });
-          setImageError(false);
-        })
-        .catch((err) => {
-          setImageError("Image upload failed (2mb max)");
+        const urls = await Promise.all(promises);
+
+        setFormData({
+          ...formData,
+          imageUrls: formData.imageUrls.concat(urls),
         });
-    } else {
-      setImageError("You can only upload 6 images");
+
+        setImageError(false);
+      } else {
+        setImageError("You can only upload 6 images");
+      }
+    } catch (err) {
+      setImageError("Image upload failed (2mb max)");
+    } finally {
+      setLoading(false); // Set loading to false when upload is complete or fails
     }
   };
 
   const storeImage = async (file) => {
+    setLoading(true);
     return new Promise((resolve, reject) => {
       const storage = getStorage(app);
       const fileName = new Date().getTime() + file.name;
@@ -125,7 +127,7 @@ const RoomRegister = () => {
       });
       const data = await res.json();
       setLoading(false);
-      navigate("/profile");
+      navigate("/home");
       if (data.success === false) {
         setError(data.message);
       }
@@ -255,7 +257,7 @@ const RoomRegister = () => {
             onClick={handleSubmitImage}
             className="bg-slate-400 rounded-md p-2 mt-4"
           >
-            Upload Image
+            {loading ? "Uploading" : "Upload"}
           </button>
           <p className="text-red-700">{imageError && imageError}</p>
           {formData.imageUrls.length > 0 &&

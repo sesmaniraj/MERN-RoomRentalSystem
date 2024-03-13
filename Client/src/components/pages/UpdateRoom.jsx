@@ -305,7 +305,7 @@ const UpdateRoom = () => {
           <label htmlFor="images" className="mb-2">
             Images
           </label>
-          <div className="flex items-center gap-2">
+          <div className="flex  items-center gap-2">
             <input
               type="file"
               id="images"
@@ -326,26 +326,27 @@ const UpdateRoom = () => {
               </span>
             </button>
           </div>
-          <p className="text-red-700 mt-2">{imageError && imageError}</p>
-          {formData.imageUrls.length > 0 &&
-            formData.imageUrls.map((url, index) => (
-              <div key={url} className="flex items-center mt-2">
-                <img
-                  src={url}
-                  alt=""
-                  className="w-40 h-40 object-contain rounded-lg mr-2"
-                />
-                <button
-                  type="button"
-                  className="text-red-700 flex items-center"
-                  onClick={() => handleDeleteImage(index)}
-                >
-                  <FaTrash />
-                </button>
-              </div>
-            ))}
+          <div className="flex gap-5 ">
+            <p className="text-red-700 mt-2">{imageError && imageError}</p>
+            {formData.imageUrls.length > 0 &&
+              formData.imageUrls.map((url, index) => (
+                <div key={url} className="flex flex-col  items-center mt-2">
+                  <img
+                    src={url}
+                    alt=""
+                    className="w-40 h-40 object-contain rounded-lg mr-2"
+                  />
+                  <button
+                    type="button"
+                    className="text-red-700 flex items-center"
+                    onClick={() => handleDeleteImage(index)}
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
+              ))}
+          </div>
         </div>
-
         {/* Submit button */}
         <button type="submit" className="bg-sky-400 rounded-md p-2">
           {loading ? "Updating" : "Update"}

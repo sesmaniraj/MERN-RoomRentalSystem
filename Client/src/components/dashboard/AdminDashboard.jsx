@@ -6,6 +6,7 @@ import ProfilePage from "../pages/ProfilePage";
 import RoomRegister from "../pages/RoomRegister";
 import ViewRoom from "./ViewRoom";
 import ViewUser from "./ViewUser";
+import { Link } from "react-router-dom";
 
 const RoomTable = () => {
   const [selectedItem, setSelectedItem] = useState("profile");
@@ -18,7 +19,9 @@ const RoomTable = () => {
     <div className="flex flex-col h-screen">
       {/* Top bar */}
       <div className="bg-gray-800 text-white p-4 flex justify-between">
-        <span>Room Rental System</span>
+        <Link to={"/home"}>
+          <span>Room Rental System</span>
+        </Link>
         <span>Welcome Admin</span>
       </div>
 
