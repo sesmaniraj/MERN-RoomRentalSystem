@@ -50,14 +50,14 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="bg-gray-800 p-4 shadow-lg flex items-start justify-between flex-col md:flex-row z-50">
+      <div className="bg-gray-800 p-4 shadow-lg flex items-start justify-between flex-col lg:flex-row z-50">
         <div className="flex justify-between items-center gap-4">
           <Link to={"/home"} className="text-lg font-bold text-white">
             HamroRoom
           </Link>
           <form
             onSubmit={handleSearch}
-            className="flex items-center bg-white p-2 rounded-md mt-2 md:mt-0"
+            className="flex items-center bg-white p-2 rounded-md mt-2 md:mt-0 w-ful"
           >
             {currentUser ? (
               <>
@@ -65,7 +65,7 @@ const Navbar = () => {
                 <input
                   type="text"
                   placeholder="Search Room here"
-                  className="bg-transparent focus:outline-none w-24 sm:w-64 border-none"
+                  className="bg-transparent focus:outline-none w-24 sm:w-64 border-none w-full"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -80,7 +80,7 @@ const Navbar = () => {
             )}
           </form>
         </div>
-        <div className="flex items-center gap-4 mt-4 md:mt-0">
+        <div className="flex items-center justify-center gap-4 mt-4 md:mt-0">
           {currentUser ? (
             <>
               <Link to={"/profile"} className="flex items-center text-white">

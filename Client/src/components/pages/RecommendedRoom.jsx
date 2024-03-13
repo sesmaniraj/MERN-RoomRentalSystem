@@ -35,7 +35,7 @@ const RecommendedRoom = () => {
                 Recommended Rooms
               </h2>
             </div>
-            <div className="flex gap-2 mx-auto">
+            <div className="flex  flex-wrap  gap-2 mb-5">
               {offerListings.map((listing) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
