@@ -125,7 +125,7 @@ const RoomRegister = () => {
       });
       const data = await res.json();
       setLoading(false);
-      navigate("/profile");
+      navigate("/home");
       if (data.success === false) {
         setError(data.message);
       }
@@ -235,7 +235,7 @@ const RoomRegister = () => {
           <input
             type="number"
             id="discountedPrice"
-            min="5000"
+            min="1000"
             max="100000"
             className="p-3 border border-gray-300 rounded-lg"
             onChange={handleChange}

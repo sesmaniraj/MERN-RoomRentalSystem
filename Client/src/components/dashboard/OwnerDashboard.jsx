@@ -5,6 +5,7 @@ import ProfilePage from "../pages/ProfilePage";
 import ViewRoom from "./ViewRoom";
 import ViewUser from "./ViewUser";
 import { Link } from "react-router-dom";
+import ViewUserRoom from "./ViewUserRoom";
 
 const OwnerDashboard = () => {
   const [selectedItem, setSelectedItem] = useState("profile");
@@ -70,7 +71,7 @@ const OwnerDashboard = () => {
           )}
           {selectedItem === "viewRoom" && (
             <div>
-              <ViewRoom />
+              <ViewUserRoom />
             </div>
           )}
           {/* Add more conditions for other sidebar items */}
