@@ -21,10 +21,11 @@ const App = () => {
   const location = useLocation();
   const { currentUser } = useSelector((state) => state.user);
   const hideNavbar = location.pathname === "/admindashboard";
+  const hideOwnerNavbar = location.pathname === "/owner";
   const hideUpdateNavbar = location.pathname.startsWith("/updateroom");
   return (
     <>
-      {!hideNavbar && !hideUpdateNavbar && <Navbar />}
+      {!hideNavbar && !hideUpdateNavbar && hideOwnerNavbar && <Navbar />}
       <ToastContainer />
       <Routes>
         <Route
