@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "./components/Navbar";
 import { ToastContainer } from "react-toastify";
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./components/pages/Home.jsx";
 import LoginPage from "./components/pages/LoginPage.jsx";
@@ -21,9 +21,10 @@ const App = () => {
   const location = useLocation();
   const { currentUser } = useSelector((state) => state.user);
   const hideNavbar = location.pathname === "/admindashboard";
+  const hideUpdateNavbar = location.pathname.startsWith("/updateroom");
   return (
     <>
-      {!hideNavbar && <Navbar />}
+      {!hideNavbar && !hideUpdateNavbar && <Navbar />}
       <ToastContainer />
       <Routes>
         <Route
